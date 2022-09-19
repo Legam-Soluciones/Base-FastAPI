@@ -1,0 +1,209 @@
+1) open el CMD en modo Administrador 
+
+2) estando ahi verificar la version de python
+			C:\Windows\system32>python --version
+			
+2) intalar el poetry
+			C:\Windows\system32>pip install poetry
+			
+3)crear una carpeta en el escritorio desde el CMD
+			C:\Windows\system32>cd D:\legam\desktop
+			C:\Windows\system32>d:
+			D:\legam\desktop
+			D:\legam\Desktop>mkdir base_api
+			D:\legam\Desktop>cd base_api
+			D:\legam\Desktop\base_api>dir
+			
+4)correr el poetry el el folder Base_APi
+			D:\legam\Desktop\base_api>poetry init
+			y dar [yes] a las preguntas
+			
+5)agregar las librerias
+			D:\legam\Desktop\base_api>poetry add fastapi uvicorn sqlalchemy
+			
+6) realizar un update
+			D:\legam\Desktop\base_api>poetry update
+			
+7)al terminar el update iniciamos el Visual Studio Code	
+			D:\legam\Desktop\base_api>code .
+			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+"ConnectionStrings": {
+        "DefaultConnection": "Data Source=ANUBIS-INTEL64E;Initial Catalog=PELICULAS-APIv2;Integrated Security=True"
+    },
+	
+	WepApiPeliculas2022v2
+	
+	¿Qué librerías tiene Python?
+¿Cuáles son las mejores librerías de Python?
+
+Matplotlib. Esta es una de las librerías de Python más usadas, pues su procesamiento y generador de gráficos son de amplia calidad.
+Seaborn.
+Bokeh.
+NumPy.
+SciPy.
+Pandas.
+Numba.
+Scikit-Learn.
+sqlalchemy.
+FastAPI.
+poetry add sqlmodel
+pip install peewee    
+pip install poetry
+pip install "fastapi[all]"
+pip install "uvicorn[standard]"
+pip freeze
+freeze requirements.txt
+pip install virtualenv
+python -m vent ent
+& d:/legam/Desktop/WebApiEstudiantes.Python/Banner-API/ent/Scripts/Activate.ps1
+uvicorn scr/main:app --reload
+python -m uvicorn main:app --reload -- 9999
+
+	
+	
+	
+	
+	
+	
+	{
+        "id": 4,
+        "nombre": "Terminator",
+        "rutaImagen": "Test",
+        "descripcion": "Test Descripcion",
+        "duracion": "125",
+        "clasificacion": 1,
+        "categoriaId": 1,
+        "categoria": null
+    
+	
+	
+
+{
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+    "title": "One or more validation errors occurred.",
+    "status": 400,
+    "traceId": "|34b91873-47a5cb2980250ef6.",
+    "errors": {
+        "Nombre": [
+            "El campo nombre es obligatorio."
+        ],
+        "Duracion": [
+            "El campo nombre es obligatorio"
+        ],
+        "Descripcion": [
+            "El campo nombre es obligatorio"
+        ]
+    }
+}
+
+
+session.py
+
+from unittest import result
+from sqlmodel import Field, SQLModel, create_engine
+from sqlalchemy import create_engine, MetaData, Table
+
+from sqlalchemy.orm import mapper
+from sqlalchemy.sql import select
+
+class MyTable(object):
+    pass
+
+sql_url = 'mssql+pymssql://preset:Admlnp3set19@mattilda-prod.database.windows.net/mattilda-prod'
+
+engine = create_engine(sql_url, echo=True)
+
+metadata = MetaData(engine)
+my_table_instance = Table('MyTable', metadata, autoload=True)
+mapper(MyTable, my_table_instance)
+
+conn = engine.connect()
+s = select([MyTable.ColumnName]).where(MyTable.ID == 802)
+res = conn.execute(s)
+row = res.fetchone()
+res = None if row is None else row['ColumnName']
+    
+print(res)
+
+
+
+
+
+
+===============================================================================================================================
+
+main.py
+from fastapi import FastAPI
+from sqlalchemy import create_engine
+
+app = FastAPI()
+
+
+@app.get("/alumnos/{id_alumno}")
+async def root(id_alumno: int):
+    sql_url = 'mssql+pymssql://preset:Adm1np3set19@mattilda-prod.database.windows.net/mattilda-prod'
+    engine = create_engine(sql_url)
+    print(id_alumno)
+    result = engine.execute(f'select * from t_alumno where IDAlumno = {id_alumno}')
+
+    obj = {}
+    for row in result:
+        print(row)
+        obj = {
+            "name": row[2],
+            "last_name": row[3]
+        }
+
+    result.close()
+
+    return obj
+    
+	
+=============================================================================================================================
+
+session.py
+from unittest import result
+from sqlmodel import Field, SQLModel, create_engine
+from sqlalchemy import create_engine, MetaData, Table
+
+from sqlalchemy.orm import mapper
+from sqlalchemy.sql import select
+
+class MyTable(object):
+    pass
+
+
+
+sql_url = 'mssql+pymssql://preset:Admlnp3set19@mattilda-prod.database.windows.net/mattilda-prod'
+
+engine = create_engine(sql_url, echo=True)
+
+metadata = MetaData(engine)
+my_table_instance = Table('MyTable', metadata, autoload=True)
+mapper(MyTable, my_table_instance)
+
+conn = engine.connect()
+s = select([MyTable.ColumnName]).where(MyTable.ID == 802)
+res = conn.execute(s)
+row = res.fetchone()
+res = None if row is None else row['ColumnName']
+
+    
+print(res)
+
+
+	
