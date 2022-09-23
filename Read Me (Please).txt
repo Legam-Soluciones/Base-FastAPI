@@ -69,7 +69,6 @@ python -m vent ent
 uvicorn scr/main:app --reload
 python -m uvicorn main:app --reload -- 9999
 
-		
 	{
         "id": 4,
         "nombre": "Terminator",
@@ -79,10 +78,6 @@ python -m uvicorn main:app --reload -- 9999
         "clasificacion": 1,
         "categoriaId": 1,
         "categoria": null
-    
-	
-	
-
 {
     "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
     "title": "One or more validation errors occurred.",
@@ -136,7 +131,6 @@ print(res)
 **************************************************************************************************
 main.py
 **************************************************************************************************
-
 from fastapi import FastAPI
 from sqlmodel import Field, SQLModel, create_engine
 from sqlalchemy import create_engine, MetaData, Table
@@ -165,7 +159,7 @@ async def root(id_alumno):
             "incorp": row[8],
             "college": row[9],
             "status": row[12],
-            "fecha_reg": row[14]
+            "registration_date": row[14]
         }
     result.close()
 
@@ -330,16 +324,13 @@ async def root(id_conceptos):
     engine = create_engine(sql_url)
     
     result = engine.execute(f'select * from cat_conceptos where IDConcepto = {id_conceptos}')
-
     obj = {}
-
     for row in result:
         print(row)
         obj = {
             "concept": row[1],
             "category": row[2],
            }
-
     result.close()
 
     return obj
@@ -435,6 +426,68 @@ async def root(id_alumno):
 
 #======================================================================================================
 
+@app.get("/campus_by_name/{nombre}")
+async def root(nombre):
+
+    sql_url = 'mssql+pymssql://preset:Adm1np3set19@mattilda-prod.database.windows.net/mattilda-prod'
+    print(nombre)
+    engine = create_engine(sql_url)
+    
+    result = engine.execute(f'select * from cat_campus where Nombre = \'{nombre}\'') 
+    campus_list = []
+    for row in result:
+        print(row)
+        obj = {
+            "idcampus": row[0],
+            "name": row[1],
+            "street": row[2],
+            "Suburb": row[4],
+            "idSuburb": row[3],
+            "municipality": row[5],
+            "state": row[6],
+            "zip": row[7],
+            "idcollege": row[8],
+            "status": row[9],
+            "fecha_reg": row[10]
+        }
+        campus_list.append(obj)
+    result.close()
+
+    return campus_list
+
+#======================================================================================================
+
+@app.get("/charges_by_concept/{conceptos}")
+async def root(conceptos):
+
+    sql_url = 'mssql+pymssql://preset:Adm1np3set19@mattilda-prod.database.windows.net/mattilda-prod'
+    print(conceptos)
+    engine = create_engine(sql_url)
+    
+    result = engine.execute(f'select * from t_cargos where Concepto = \'{conceptos}\'')
+    charges_list = []
+    for row in result:
+        print(row)
+        obj = {
+            "idalumno": row[0],
+            "transaction": row[1],
+            "period": row[2],
+            "concept": row[4],
+            "idconcept": row[3],         
+            "amount": row[5],
+            "balance": row[6],
+            "userid": row[7],
+            "expiration_date": row[8],
+            "registration_date": row[9],
+            "transactionID_old": row[10]
+           }
+        charges_list.append(obj)
+    result.close()
+
+    return charges_list
+
+#======================================================================================================
+
 @app.get("/discounts/{id_descuento}")
 async def root(id_descuento):
 
@@ -509,7 +562,6 @@ async def say_Hello(name:str ):
 #======================================================================================================
 
 
-
 **************************************************************************************************
 ==================================================================================================
 **************************************************************************************************
@@ -526,8 +578,10 @@ Campus    !!!
 Cargos    !!
 Descuentos!!
 Becas     !!
-Plan de estudios 
+Plan de estudios !!
 
+
+7019 8020 Amazing Toys 
 
 
 
