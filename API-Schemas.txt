@@ -1,0 +1,259 @@
+#===========================================================================================================
+api.py
+#===========================================================================================================
+
+from fastapi import APIRouter
+
+from api.v100.routes import students, responsibles, schools, concepts, campus, charges, discounts, schoolarships, payments
+
+router = APIRouter()
+
+router.include_router(students.router, prefix="/students")
+router.include_router(responsibles.router, prefix="/responsibles")
+router.include_router(schools.router, prefix="/schools")
+router.include_router(concepts.router, prefix="/concepts")
+router.include_router(campus.router, prefix="/campus")
+router.include_router(charges.router, prefix="/charges")
+router.include_router(discounts.router, prefix="/charges")
+router.include_router(schoolarships.router, prefix="/schoolarships")
+router.include_router(payments.router, prefix="/payments")
+
+
+
+
+#===========================================================================================================
+Schemas
+#===========================================================================================================
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class CampusRead(BaseModel):
+    name: str
+    street: str
+    suburb:str
+    suburbid: str
+    municipalityid: str
+    stateid: str
+    zip: str
+    collegeid: str
+    statusid: str
+    registration_date: datetime
+
+class CampusbynameRead(BaseModel):
+    idcampus: int
+    name: str
+    street: str
+    suburb:str
+    suburbid: str
+    municipalityid: str
+    stateid: str
+    zip: str
+    collegeid: str
+    statusid: str
+    registration_date: datetime
+            
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class ChargesRead(BaseModel):
+    transaction_id: int
+    period: str
+    concept: str
+    amount: str
+    balance: str
+    userid: str
+    registration_date: datetime
+  
+class ChargesbynameRead(BaseModel):   
+    idalumno: int
+    transaction_id: int
+    period: str
+    concept: str
+    amount: str
+    balance: str
+    userid: str
+    registration_date: datetime
+	
+#===========================================================================================================	
+
+from datetime import datetime
+
+from typing import Union
+
+from pydantic import BaseModel
+
+class ConceptRead(BaseModel):
+    concept: str
+    category: Union[str, int]
+    provserv_key: int
+    unit_key: int
+    college_id: int 
+    period_id: int
+    program_id: int
+    level_id: int
+    registration_date: datetime
+
+class ConceptbynameRead(BaseModel):
+    concept_id: int
+    concept: str
+    category: Union[str, int]
+    provserv_key: int
+    unit_key: int
+    college_id: int 
+    period_id: int
+    program_id: int
+    level_id: int
+    registration_date: datetime
+	
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class DiscountsRead(BaseModel):
+    idconcept: str
+    desctypeid: int
+    days_period: int
+    date_application: datetime
+    type_amount: str
+    percentage: str
+    amount: str
+    idconcept_applies: str
+    statusid: str
+    userid: int
+    activity_date: datetime
+    
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+from pyparsing import str_type
+
+class PaymentsRead(BaseModel):
+    transact_id: int
+    transaction_charge_id: str
+    concepts_id: str
+    concepts: str
+    payment_amount: str
+    amount_applied: str
+    status_id: str
+    uid_cfdi: str
+    payment_id: str
+    user_id: int
+    pay_day: datetime
+    registration_date: datetime
+    transaction_old_id: str
+    transaccion_charge_old: str
+
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class ResponsibleRead(BaseModel):
+    name: str
+    father_name: str
+    mother_name: str
+    uidcollege: int
+    email: str
+    phone: int
+    idalumno: int
+    status: str
+    registration_date: datetime
+    activity_date: datetime
+
+class ResponsiblebynameRead(BaseModel):
+    idresponsable: int
+    name: str
+    father_name: str
+    mother_name: str
+    uidcollege: str
+    email: str
+    phone: str
+    idalumno: int
+    status: str
+    registration_date: datetime
+    activity_date: datetime
+
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class SchoolarshipsRead(BaseModel):
+    idconcept: str
+    type_amount: str
+    percentage: str
+    amount: str
+    idconcept_applies: str
+    reason: str
+    idstatus: str
+    userid: int
+    activity_date: datetime
+
+#===========================================================================================================	
+
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class SchoolRead(BaseModel):
+    name: str
+    street: str
+    suburb: str
+    suburbid: int
+    municipalityid: int
+    stateid: int
+    zip: int
+    registration_date: datetime
+
+class SchoolbynameRead(BaseModel):
+    idcolegio: int
+    name: str
+    street: str
+    suburb: str
+    suburbid: int
+    municipalityid: int
+    stateid: int
+    zip: int
+    registration_date: datetime
+
+#===========================================================================================================
+	
+from datetime import datetime
+
+from pydantic import BaseModel
+
+class StudentRead(BaseModel):
+    name: str
+    father_name: str
+    mother_name: str
+    curp: str
+    level: str
+    incorporation_key: str
+    college_id: int
+    status: str
+    registration_date: datetime
+    
+class StudentsbynameRead(BaseModel):
+    idalumno: int
+    name: str
+    father_name: str
+    mother_name: str
+    curp: str
+    level: str
+    incorporation_key: str
+    college_id: int
+    status: str
+    registration_date: datetime
+
+	
