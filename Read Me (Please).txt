@@ -19,7 +19,7 @@
 			y dar [yes] a las preguntas
 			
 5)agregar las librerias
-			D:\legam\Desktop\base_api>poetry add fastapi uvicorn sqlalchemy
+			D:\legam\Desktop\base_api>poetry add fastapi uvicorn sqlalchemy pymssql pyparsing
 			
 6) realizar un update
 			D:\legam\Desktop\base_api>poetry update
