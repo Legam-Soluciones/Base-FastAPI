@@ -247,9 +247,7 @@ from typing import List
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from sqlalchemy import union
-
-from api.v100.schemas.payments import PaymentsRead
+from api.v100.schemas.payments import PaymentsRead, PaymentsbytransaccionRead
 
 from db.sessions import engine
 
@@ -260,8 +258,8 @@ router = APIRouter()
     response_model=List[PaymentsRead],
     status_code=http_status.HTTP_200_OK
 )
-async def get_payments_by_id(
-    id_alumno: union[int, str]
+async def get_payments_by_id_alumno(
+    id_alumno: int
 ):
     sql = f'select * from t_pagos where IDAlumno = {id_alumno}'
     result = engine.execute(sql)
@@ -275,17 +273,44 @@ async def get_payments_by_id(
             payment_amount=row[5],
             amount_applied=row[6],
             status_id=row[7],
-            uid_cfdi=row[8],
             payment_id=row[9],
             user_id=row[10],
-            pay_day=row[11]
-            registration_date=row[12],
-            transaction_old_id=row[13],
-            transaccion_charge_old=[14]
+            pay_day=row[11],
+            registration_date=row[12]
         )
         for row in result
     ]
     return payments
+
+@router.get(
+    "/paymentsbytransaccion/{id_transaccion}",
+    response_model=List[PaymentsbytransaccionRead],
+    status_code=http_status.HTTP_200_OK
+)
+async def get_payments_by_id_transaccion(
+    id_transaccion: int
+):
+    sql = f'select * from t_pagos where IDTransaccion = {id_transaccion}'
+    result = engine.execute(sql)
+
+    paymentsbytransaccion = [
+        PaymentsbytransaccionRead(
+            alumno_id=row[0],
+            transact_id=row[1],
+            transaction_charge_id=row[2],
+            concepts_id=row[3],
+            concepts=row[4],
+            payment_amount=row[5],
+            amount_applied=row[6],
+            status_id=row[7],
+            payment_id=row[9],
+            user_id=row[10],
+            pay_day=row[11],
+            registration_date=row[12]
+        )
+        for row in result
+    ]
+    return paymentsbytransaccion
 
 #====================================================================
 

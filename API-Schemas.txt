@@ -131,10 +131,11 @@ class DiscountsRead(BaseModel):
     
 #===========================================================================================================	
 
-from datetime import datetime
+from datetime import date, datetime
+
+from typing import Union
 
 from pydantic import BaseModel
-from pyparsing import str_type
 
 class PaymentsRead(BaseModel):
     transact_id: int
@@ -144,13 +145,24 @@ class PaymentsRead(BaseModel):
     payment_amount: str
     amount_applied: str
     status_id: str
-    uid_cfdi: str
     payment_id: str
     user_id: int
-    pay_day: datetime
+    pay_day: date
     registration_date: datetime
-    transaction_old_id: str
-    transaccion_charge_old: str
+
+class PaymentsbytransaccionRead(BaseModel):
+    alumno_id: int
+    transact_id: int
+    transaction_charge_id: str
+    concepts_id: str
+    concepts: str
+    payment_amount: str
+    amount_applied: str
+    status_id: str
+    payment_id: str
+    user_id: int
+    pay_day: date
+    registration_date: datetime    
 
 #===========================================================================================================	
 
