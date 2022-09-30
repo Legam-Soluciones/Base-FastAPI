@@ -26,171 +26,213 @@ Schemas
 #===========================================================================================================
 
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
 class CampusRead(BaseModel):
-    name: str
-    street: str
-    suburb:str
-    suburbid: str
-    municipalityid: str
-    stateid: str
+    campus_name: str
+    street: Optional[str] = None
+    suburb: Optional[str] = None
+    suburb_id: str
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
     zip: str
-    collegeid: str
-    statusid: str
+    college_id: str
+    status_id: str
     registration_date: datetime
 
 class CampusbynameRead(BaseModel):
-    idcampus: int
-    name: str
-    street: str
-    suburb:str
-    suburbid: str
-    municipalityid: str
-    stateid: str
+    campus_id: int
+    campus_name: str
+    street: Optional[str] = None
+    suburb: Optional[str] = None
+    suburb_id: str
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
     zip: str
-    collegeid: str
-    statusid: str
-    registration_date: datetime
+    college_id: str
+    status_id: str
+    registration_date: datetime            
             
 #===========================================================================================================	
 
-from datetime import datetime
+from datetime import date, datetime
+
+from typing import Optional
 
 from pydantic import BaseModel
 
 class ChargesRead(BaseModel):
     transaction_id: int
-    period: str
-    concept: str
+    period: Optional[str] = None
+    concept: Optional[str] = None
+    concept_id: Optional[str] = None
     amount: str
     balance: str
-    userid: str
+    userid: int
+    expiration_date: date
     registration_date: datetime
+    transaction_id_old: Optional[str] = None
   
 class ChargesbynameRead(BaseModel):   
-    idalumno: int
+    alumno_id: int
     transaction_id: int
-    period: str
-    concept: str
+    period: Optional[str] = None
+    concept: Optional[str] = None
+    concept_id: Optional[str] = None
     amount: str
     balance: str
-    userid: str
+    userid: int
+    expiration_date: date
     registration_date: datetime
+    transaction_id_old: Optional[str] = None
 	
 #===========================================================================================================	
 
 from datetime import datetime
 
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
 class ConceptRead(BaseModel):
-    concept: str
+    concept: Optional[str] = None
     category: Union[str, int]
-    provserv_key: int
-    unit_key: int
+    provserv_key: Optional[int] = None
+    unit_key: Union[str, int]
     college_id: int 
-    period_id: int
-    program_id: int
-    level_id: int
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
     registration_date: datetime
 
 class ConceptbynameRead(BaseModel):
-    concept_id: int
-    concept: str
+    concept_id: Union[str, int]
+    concept: Optional[str] = None
     category: Union[str, int]
-    provserv_key: int
-    unit_key: int
+    provserv_key: Optional[int] = None
+    unit_key: Union[str, int]
     college_id: int 
-    period_id: int
-    program_id: int
-    level_id: int
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
     registration_date: datetime
 	
 #===========================================================================================================	
 
 from datetime import datetime
 
+from sys import float_repr_style
+
+from typing import Optional
+
 from pydantic import BaseModel
 
 class DiscountsRead(BaseModel):
-    idconcept: str
-    desctypeid: int
-    days_period: int
-    date_application: datetime
+    concept_id: str
+    desctype_id: int
+    days_period: Optional[str] = None
+    date_application: Optional[datetime] = None
     type_amount: str
-    percentage: str
-    amount: str
-    idconcept_applies: str
-    statusid: str
-    userid: int
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_id_applies: str
+    status_id: str
+    user_id: int
+    activity_date: datetime
+
+class DiscountstypeRead(BaseModel):
+    config_id_d: int
+    concept_id: str
+    desctype_id: int
+    days_period: Optional[str] = None
+    date_application: Optional[datetime] = None
+    type_amount: str
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_id_applies: str
+    status_id: str
+    user_id: int
     activity_date: datetime
     
 #===========================================================================================================	
 
+from contextlib import nullcontext
+
 from datetime import date, datetime
 
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 
 class PaymentsRead(BaseModel):
     transact_id: int
     transaction_charge_id: str
-    concepts_id: str
-    concepts: str
+    concepts_id: Optional[str] = None
+    concepts: Optional[str] = None
     payment_amount: str
     amount_applied: str
     status_id: str
+    uid_cfdi: Optional[str] = None
     payment_id: str
     user_id: int
     pay_day: date
     registration_date: datetime
+    transaction_id_old: Optional[str] = None 
+    transaction_id_charge_old: Optional[str] = None
 
 class PaymentsbytransaccionRead(BaseModel):
     alumno_id: int
     transact_id: int
     transaction_charge_id: str
-    concepts_id: str
-    concepts: str
+    concepts_id: Optional[str] = None
+    concepts: Optional[str] = None
     payment_amount: str
     amount_applied: str
     status_id: str
+    uid_cfdi: Optional[str] = None
     payment_id: str
     user_id: int
     pay_day: date
-    registration_date: datetime    
+    registration_date: datetime   
+    transaction_id_old: Optional[str] = None 
+    transaction_id_charge_old: Optional[str] = None
+
 
 #===========================================================================================================	
 
 from datetime import datetime
 
+from typing import Optional
+
 from pydantic import BaseModel
 
 class ResponsibleRead(BaseModel):
-    name: str
+    responsable_name: str
     father_name: str
-    mother_name: str
-    uidcollege: int
-    email: str
-    phone: int
-    idalumno: int
+    mother_name: Optional[str] = None
+    college_uid: Optional[str] = None
+    curp: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    contact_pref: str
+    alumno_id: int
     status: str
     registration_date: datetime
     activity_date: datetime
 
 class ResponsiblebynameRead(BaseModel):
-    idresponsable: int
-    name: str
+    responsable_id: int
+    responsable_name: str
     father_name: str
-    mother_name: str
-    uidcollege: str
-    email: str
-    phone: str
-    idalumno: int
+    mother_name: Optional[str] = None
+    college_uid: Optional[str] = None
+    curp: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    contact_pref: str
+    alumno_id: int
     status: str
     registration_date: datetime
     activity_date: datetime
@@ -199,73 +241,96 @@ class ResponsiblebynameRead(BaseModel):
 
 from datetime import datetime
 
+from typing import Optional
+
 from pydantic import BaseModel
 
 class SchoolarshipsRead(BaseModel):
-    idconcept: str
+    config_id_b: int
+    concept_id: str
     type_amount: str
-    percentage: str
-    amount: str
-    idconcept_applies: str
-    reason: str
-    idstatus: str
-    userid: int
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_applies_id: str
+    reason: Optional[str] = None
+    status_id: str
+    user_id: int
     activity_date: datetime
 
 #===========================================================================================================	
 
 from datetime import datetime
 
+from typing import Optional
+
 from pydantic import BaseModel
 
 class SchoolRead(BaseModel):
-    name: str
-    street: str
-    suburb: str
-    suburbid: int
-    municipalityid: int
-    stateid: int
+    college_name: str
+    street: Optional[str] = None
+    suburb: Optional[str] = None
+    suburb_id: int
+    municipality_id: Optional[int] = None
+    state_id: Optional[int] = None
     zip: int
+    status_id: str
     registration_date: datetime
+    c_cards: Optional[float] = None 
+    c_oxxo: Optional[float] = None
 
 class SchoolbynameRead(BaseModel):
-    idcolegio: int
-    name: str
-    street: str
-    suburb: str
-    suburbid: int
-    municipalityid: int
-    stateid: int
+    colegio_id: int
+    college_name: str
+    street: Optional[str] = None
+    suburb: Optional[str] = None
+    suburb_id: int
+    municipality_id: Optional[int] = None
+    state_id: Optional[int] = None
     zip: int
+    status_id: str
     registration_date: datetime
+    c_cards: Optional[float] = None 
+    c_oxxo: Optional[float] = None
 
 #===========================================================================================================
 	
 from datetime import datetime
 
+from typing import Optional, Union
+
 from pydantic import BaseModel
 
 class StudentRead(BaseModel):
-    name: str
+    num_control: Optional[int] = None
+    student_name: str
     father_name: str
-    mother_name: str
+    mother_name: Optional[str] = None
     curp: str
-    level: str
-    incorporation_key: str
+    level_id: Optional[int] = None
+    level: Optional[str] = None
+    incorporation_key: Optional[str] = None
     college_id: int
-    status: str
+    campus_id: Optional[str] = None
+    degree: Optional[str] = None
+    cluster: Optional[str] = None
+    status_id: Union[str, int]
     registration_date: datetime
     
 class StudentsbynameRead(BaseModel):
-    idalumno: int
-    name: str
+    alumno_id: int
+    num_control: Optional[int] = None
+    student_name: str
     father_name: str
-    mother_name: str
+    mother_name: Optional[str] = None
     curp: str
-    level: str
-    incorporation_key: str
+    level_id: Optional[int] = None
+    level: Optional[str] = None
+    incorporation_key: Optional[str] = None
     college_id: int
-    status: str
+    campus_id: Optional[str] = None
+    degree: Optional[str] = None
+    cluster: Optional[str] = None
+    status_id: Union[str, int]
     registration_date: datetime
 
 	

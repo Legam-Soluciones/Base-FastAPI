@@ -22,15 +22,15 @@ async def get_campus_by_id(
 
     campus = [
         CampusRead(
-            name=row[1],
+            campus_name=row[1],
             street=row[2],
             suburb=row[4],
-            suburbid=row[3],
-            municipalityid=row[5],
-            stateid=row[6],
+            suburb_id=row[3],
+            municipality_id=row[5],
+            state_id=row[6],
             zip=row[7],
-            collegeid=row[8],
-            statusid=row[9],
+            college_id=row[8],
+            status_id=row[9],
             registration_date=row[10]
         )
         for row in result
@@ -50,21 +50,22 @@ async def get_campus_by_nombre(
 
     campusbyname = [
         CampusbynameRead(
-            idcampus=row[0],
-            name=row[1],
+            campus_id=row[0],
+            campus_name=row[1],
             street=row[2],
             suburb=row[4],
-            suburbid=row[3],
-            municipalityid=row[5],
-            stateid=row[6],
+            suburb_id=row[3],
+            municipality_id=row[5],
+            state_id=row[6],
             zip=row[7],
-            collegeid=row[8],
-            statusid=row[9],
+            college_id=row[8],
+            status_id=row[9],
             registration_date=row[10]
         )
         for row in result
     ]
     return campusbyname
+
 
 
 #====================================================================
