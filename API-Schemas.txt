@@ -306,6 +306,8 @@ class SchoolbynameRead(BaseModel):
 	
 from datetime import datetime
 
+from types import UnionType
+
 from typing import Optional, Union
 
 from pydantic import BaseModel
@@ -328,10 +330,10 @@ class StudentRead(BaseModel):
     
 class StudentsbynameRead(BaseModel):
     alumno_id: int
-    num_control: Optional[int] = None
+    num_control: Optional[str] = None
     student_name: str
     father_name: str
-    mother_name: Optional[str] = None
+    mother_name: Optional[str] = None    
     curp: str
     level_id: Optional[int] = None
     level: Optional[str] = None

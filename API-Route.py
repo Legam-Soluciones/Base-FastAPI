@@ -491,7 +491,7 @@ async def get_schools_by_nombre(
     
 #====================================================================
 
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter
 from fastapi import status as http_status
@@ -508,21 +508,27 @@ router = APIRouter()
     status_code=http_status.HTTP_200_OK
 )
 async def get_students_by_id(
-    id_alumno: int
+    id_alumno: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_alumno where IDAlumno = {id_alumno}'
+    sql = f'select * from t_alumno where IDAlumno = {id_alumno} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     students = [
-        StudentRead(
-            name=row[2],
+        StudentRead(   
+            num_control=row[1],
+            student_name=row[2],
             father_name=row[3],
-            mother_name=row[4],
+            mother_name=row[4],            
             curp=row[5],
+            level_id=row[6],
             level=row[7],
             incorporation_key=row[8],
             college_id=row[9],
-            status=row[12],
+            campus_id=row[10],
+            grade=row[11],
+            cluster=row[12],
+            status_id=row[13],
             registration_date=row[14]
         )
         for row in result
@@ -535,27 +541,88 @@ async def get_students_by_id(
     status_code=http_status.HTTP_200_OK
 )
 async def get_students_by_name(
-    nombre: str
+    nombre: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_alumno where Nombre = \'{nombre}\''
+    sql = f'select * from t_alumno where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
     studentsbyname = [
         StudentsbynameRead(
-            idalumno= row[0],
-            name=row[2],
+            alumno_id= row[0],
+            num_control=row[1],
+            student_name=row[2],
             father_name=row[3],
             mother_name=row[4],
             curp=row[5],
+            level_id=row[6],
             level=row[7],
             incorporation_key=row[8],
             college_id=row[9],
-            status=row[12],
+            campus_id=row[10],
+            grade=row[11],
+            cluster=row[12],
+            status_id=row[13],
             registration_date=row[14]
         )
         for row in result   
     ]
     return studentsbyname
 
+@router.post(
+    "/studentsPost/",
+    status_code=http_status.HTTP_200_OK
+)
+async def create_students(studentsPost: StudentRead ): 
+    return studentsPost
+
+
 #====================================================================
     
+    alumno_id: str,
+    num_control: str,
+    student_name: str,
+    father_name: str,
+    mother_name: str,
+    curp: str,
+    level: str,
+    incorporation_key: str,
+    college_id: str,
+    degree: str,
+    cluster: str,
+    status_id: str
     
+    
+    {alumno_id}, {num_control}, {student_name}, {father_name}, {mother_name}, {curp}, {level}, {incorporation_key}, {college_id}, {degree}, {cluster}, {status_id} "
+    {alumno_id}, {num_control}, {student_name}, {father_name}, {mother_name}, {curp}, {level}, {incorporation_key}, {college_id}, {degree}, {cluster}, {status_id} "
+    
+    
+    
+    1)IDAlumno,
+    2)No_Control,
+    3)Nombre, 
+    4)A_Paterno,
+    5)A_Materno,
+    6)CURP, 
+    7)IDNivel,****************
+    8)Nivel, 
+    9)ClaveIncorporacion,
+    10)IDColegio, 
+    11)IDCampus,************************* 
+    12)Grado, 
+    13)Grupo,
+    14)IDEstatus
+    
+    values 
+    1(\'{alumno_id}\',
+    2\'{num_control}\', 
+    3\'{student_name}\', 
+    4\'{father_name}\', 
+    5\'{mother_name}\', 
+    6\'{curp}\', 
+    7\'{level}\',
+    8\'{incorporation_key}\', 
+    9\'{college_id}\',
+    10\'{degree}\',
+    11\'{cluster}\', 
+    12\'{status_id}\')'
