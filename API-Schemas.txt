@@ -9,6 +9,38 @@ engine = create_engine(
 )
 
 #===========================================================================================================
+session.py
+#===========================================================================================================
+from sqlalchemy import create_engine
+
+engine = create_engine(
+    'mssql+pymssql://engsandbox1:Operat0r3set03940@mattilda-dev-sql.database.windows.net/Mattilda-Dev',
+    echo=True,
+)
+
+#===========================================================================================================
+session.py
+#===========================================================================================================
+
+from sqlalchemy import create_engine
+
+engine = create_engine(
+    'mssql+pymssql://devmatt:Matgsg5#76gs#@mattilda-dev-sql.database.windows.net/Mattilda-Dev',
+    echo=True,
+)
+
+#===========================================================================================================
+session.py
+#===========================================================================================================
+
+from sqlalchemy import create_engine
+
+engine = create_engine(
+    'mssql+pymssql://sandmatt:r$jS^YDsCJce@mattilda-sandbox.database.windows.net/Mattilda-Sandbox',
+    echo=True,
+)
+
+#===========================================================================================================
 api.py
 #===========================================================================================================
 
@@ -27,9 +59,6 @@ router.include_router(charges.router, prefix="/charges")
 router.include_router(discounts.router, prefix="/charges")
 router.include_router(schoolarships.router, prefix="/schoolarships")
 router.include_router(payments.router, prefix="/payments")
-
-
-
 
 #===========================================================================================================
 Schemas
@@ -345,4 +374,9 @@ class StudentsbynameRead(BaseModel):
     status_id: Union[str, int]
     registration_date: datetime
 
-	
+#===========================================================================================================	
+
+
+
+
+
