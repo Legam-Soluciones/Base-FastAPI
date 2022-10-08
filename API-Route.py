@@ -313,77 +313,100 @@ async def get_payments_by_id_transaccion(
     ]
     return paymentsbytransaccion
 
-#====================================================================
 
-from typing import List
+#===========================================================================================================
+#===========================================================================================================
+2022/10/07
+
+
+
+from datetime import datetime
+
+from typing import List, Union
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.responsibles import ResponsibleRead, ResponsiblebynameRead
+from api.v100.schemas.responsibles import ResponsiblesRead
+from api.v100.schemas.responsibles import ResponsiblesbynameRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/responsibles/{id_responsable}",
-    response_model=List[ResponsibleRead],
+    "/responsibles/{responsable_id}",
+    response_model=List[ResponsiblesRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_responsibles_by_id(
-    id_responsable: int
+    responsable_id: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_responsable where IDResponsable = {id_responsable}'
+    sql = f'select * from t_responsable where IDResponsable = {responsable_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
-    responsibles = [
-        ResponsibleRead(
-            name= row[2],
+    responsibles_by_id = [
+        ResponsiblesRead(
+            college_id=row[1],
+            responsable_name= row[2],
             father_name= row[3],
             mother_name= row[4],
-            uidcollege= row[1],
+            college_uid= row[1],
+            curp=row[5],
             email= row[6],
             phone= row[7],
-            idalumno= row[9],
+            contact_pref=row[8],
+            alumno_id= row[9],
             status= row[10],
             registration_date=row[11],
             activity_date= row[12]
         )
         for row in result
     ]
-    return responsibles
+    return responsibles_by_id
 
 @router.get(
-     "/responsiblesbyname/{nombre}",
-    response_model=List[ResponsiblebynameRead],
+     "/responsibles_by_name/{nombre}",
+    response_model=List[ResponsiblesbynameRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_responsibles_by_name(
-    nombre: str
+    nombre: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_responsable where Nombre = \'{nombre}\''
+    sql = f'select * from t_responsable where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-    
-    responsiblesbyname = [
-        ResponsiblebynameRead(
-            idresponsable= row[0],
-            name= row[2],
+    responsibles_by_name = [
+        ResponsiblesbynameRead(
+            responsable_id= row[0],
+            college_id=row[1],
+            responsable_name= row[2],
             father_name= row[3],
             mother_name= row[4],
-            uidcollege= row[1],
+            college_uid= row[1],
+            curp=row[5],
             email= row[6],
             phone= row[7],
-            idalumno= row[9],
+            contact_pref=row[8],
+            alumno_id= row[9],
             status= row[10],
             registration_date=row[11],
             activity_date= row[12]
         )
         for row in result   
     ]
-    return responsiblesbyname
+    return responsibles_by_name
 
-#====================================================================
+
+
+
+
+#===========================================================================================================
+#===========================================================================================================
+    
+    
     
 from typing import List
 
@@ -423,14 +446,20 @@ async def get_discounts_by_id(
     ]
     return schoolarships
     
-#====================================================================
+#===========================================================================================================
+#===========================================================================================================
+2022/10/07
+
+
+
 
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.schools import SchoolRead, SchoolbynameRead
+from api.v100.schemas.schools import SchoolsRead
+from api.v100.schemas.schools import SchoolsbynameRead
 
 from db.sessions import engine
 
@@ -438,65 +467,79 @@ router = APIRouter()
 
 @router.get(
     "/schools/{id_colegios}",
-    response_model=List[SchoolRead],
+    response_model=List[SchoolsRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_schools_by_id(
-    id_colegios: int
+    id_colegios: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_colegios where IDColegio = {id_colegios}'
+    sql = f'select * from cat_colegios where IDColegio = {id_colegios} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     schools = [
-        SchoolRead(
-            name=row[1],
+        SchoolsRead(
+            college_name=row[1],
             street=row[2],
             suburb=row[4],
-            suburbid=row[3],
-            municipalityid=row[5],
-            stateid=row[6],
+            suburb_id=row[3],
+            municipality_id=row[5],
+            state_id=row[6],
             zip=row[7],
-            registration_date=row[9]
+            status_id=row[8],
+            registration_date=row[9],
+            c_cards=row[10],
+            c_oxxo=row[11]
         )
         for row in result
     ]
     return schools
 
 @router.get(
-    "/schoolsbyname/{nombre}",
-    response_model=List[SchoolbynameRead],
+    "/schools_by_name/{nombre}",
+    response_model=List[SchoolsbynameRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_schools_by_nombre(
-    nombre: str
+    nombre: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_colegios where Nombre = \'{nombre}\''
+    sql = f'select * from cat_colegios where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
-    schoolsbyname = [
-        SchoolbynameRead(
-            idcolegio=row[0],
-            name=row[1],
+    schools_by_name = [
+        SchoolsbynameRead(
+            colegio_id=row[0],
+            college_name=row[1],
             street=row[2],
             suburb=row[4],
-            suburbid=row[3],
-            municipalityid=row[5],
-            stateid=row[6],
+            suburb_id=row[3],
+            municipality_id=row[5],
+            state_id=row[6],
             zip=row[7],
-            registration_date=row[9]
+            status_id=row[8],
+            registration_date=row[9],
+            c_cards=row[10],
+            c_oxxo=row[11]
         )
         for row in result
     ]
-    return schoolsbyname    
+    return schools_by_name
     
-#====================================================================
+    
+    
+#===========================================================================================================
+#===========================================================================================================
+2022/10/07
 
-from typing import List, Optional
+
+
+from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.students import StudentRead, StudentsbynameRead
+from api.v100.schemas.students import StudentsRead, StudentsbynameRead
 
 from db.sessions import engine
 
@@ -504,7 +547,7 @@ router = APIRouter()
 
 @router.get(
     "/students/{id_alumno}",
-    response_model=List[StudentRead],
+    response_model=List[StudentsRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_students_by_id(
@@ -515,7 +558,7 @@ async def get_students_by_id(
     sql = f'select * from t_alumno where IDAlumno = {id_alumno} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
     students = [
-        StudentRead(   
+        StudentsRead(   
             num_control=row[1],
             student_name=row[2],
             father_name=row[3],
@@ -536,18 +579,18 @@ async def get_students_by_id(
     return students
 
 @router.get(
-     "/studentsbyname/{nombre}",
+     "/students_by_name/{nombre}",
     response_model=List[StudentsbynameRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_students_by_name(
     nombre: str,
-    offset: int = 0,
-    limit: int = 20
+    Offset: int = 0,
+    Limit: int = 20
 ):
-    sql = f'select * from t_alumno where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    sql = f'select * from t_alumno where Nombre = \'{nombre}\' order by Fecha_registro desc offset {Offset} rows fetch first {Limit} rows only'
     result = engine.execute(sql)
-    studentsbyname = [
+    students_by_name = [
         StudentsbynameRead(
             alumno_id= row[0],
             num_control=row[1],
@@ -567,17 +610,36 @@ async def get_students_by_name(
         )
         for row in result   
     ]
-    return studentsbyname
+    return students_by_name
 
 @router.post(
-    "/studentsPost/",
-    status_code=http_status.HTTP_200_OK
+    "/students_save/{alumno_id}",
+    status_code=http_status.HTTP_201_CREATED
 )
-async def create_students(studentsPost: StudentRead ): 
-    return studentsPost
+async def save_students(
+    alumno_id: str,
+    num_control: str,
+    student_name: str,
+    father_name: str,
+    mother_name: str,
+    curp: str,
+    level: str,
+    incorporation_key: str,
+    college_id: str,
+    degree: str,
+    cluster: str,
+    status_id: str
+    ):
+    sql = f'INSERT INTO t_alumno (IDAlumno, No_Control, Nombre, A_Paterno, A_Materno, CURP, Nivel, ClaveIncorporacion, IDColegio, Grado, Grupo, IDEstatus) values (\'{alumno_id}\', \'{num_control}\', \'{student_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{level}\', \'{incorporation_key}\', \'{college_id}\', \'{degree}\', \'{cluster}\', \'{status_id}\')'
+    result = engine.execute(sql)
+    return result
 
 
-#====================================================================
+
+#===========================================================================================================
+#===========================================================================================================
+
+
     
     alumno_id: str,
     num_control: str,
@@ -596,33 +658,41 @@ async def create_students(studentsPost: StudentRead ):
     {alumno_id}, {num_control}, {student_name}, {father_name}, {mother_name}, {curp}, {level}, {incorporation_key}, {college_id}, {degree}, {cluster}, {status_id} "
     {alumno_id}, {num_control}, {student_name}, {father_name}, {mother_name}, {curp}, {level}, {incorporation_key}, {college_id}, {degree}, {cluster}, {status_id} "
     
+   
     
-    
-    1)IDAlumno,
-    2)No_Control,
+    f'INSERT INTO t_responsable
+    (
+    1)IDResponsable, 
+    2)UIDColegio, 
     3)Nombre, 
-    4)A_Paterno,
-    5)A_Materno,
+    4)A_Paterno, 
+    5)A_Materno, 
     6)CURP, 
-    7)IDNivel,****************
-    8)Nivel, 
-    9)ClaveIncorporacion,
-    10)IDColegio, 
-    11)IDCampus,************************* 
-    12)Grado, 
-    13)Grupo,
-    14)IDEstatus
-    
-    values 
-    1(\'{alumno_id}\',
-    2\'{num_control}\', 
-    3\'{student_name}\', 
-    4\'{father_name}\', 
-    5\'{mother_name}\', 
+    7)Email, 
+    8)Telefono, 
+    9)Contacto_Pref, 
+    10)IDAlumno, 
+    11)IDEstatus, 
+    12)Fecha_registro, 
+    13)Fecha_actividad
+    )
+    values
+    (
+    1\'{responsable_id}\',
+    2\'{college_uid}\',
+    3\'{responsable_name}\',
+    4\'{father_name}\',
+    5\'{mother_name}\',
     6\'{curp}\', 
-    7\'{level}\',
-    8\'{incorporation_key}\', 
-    9\'{college_id}\',
-    10\'{degree}\',
-    11\'{cluster}\', 
-    12\'{status_id}\')'
+    7\'{email}\',
+    8\'{phone}\', 
+    9\'{contact_pref}\',
+    10\'{alumno_id}\', 
+    11\'{status}\', 
+    12\'{registration_date}\',
+    13'{activity_date}\'
+    )
+    
+    
+    
+    

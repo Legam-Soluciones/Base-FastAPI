@@ -240,6 +240,9 @@ class PaymentsbytransaccionRead(BaseModel):
 
 
 #===========================================================================================================	
+#===========================================================================================================
+2022/10/07
+
 
 from datetime import datetime
 
@@ -247,7 +250,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-class ResponsibleRead(BaseModel):
+class ResponsiblesRead(BaseModel):
     responsable_name: str
     father_name: str
     mother_name: Optional[str] = None
@@ -261,7 +264,7 @@ class ResponsibleRead(BaseModel):
     registration_date: datetime
     activity_date: datetime
 
-class ResponsiblebynameRead(BaseModel):
+class ResponsiblesbynameRead(BaseModel):
     responsable_id: int
     responsable_name: str
     father_name: str
@@ -276,7 +279,11 @@ class ResponsiblebynameRead(BaseModel):
     registration_date: datetime
     activity_date: datetime
 
+
+
+#===========================================================================================================
 #===========================================================================================================	
+
 
 from datetime import datetime
 
@@ -297,6 +304,10 @@ class SchoolarshipsRead(BaseModel):
     activity_date: datetime
 
 #===========================================================================================================	
+#===========================================================================================================
+2022/10/07
+
+
 
 from datetime import datetime
 
@@ -304,7 +315,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-class SchoolRead(BaseModel):
+class SchoolsRead(BaseModel):
     college_name: str
     street: Optional[str] = None
     suburb: Optional[str] = None
@@ -317,7 +328,7 @@ class SchoolRead(BaseModel):
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
-class SchoolbynameRead(BaseModel):
+class SchoolsbynameRead(BaseModel):
     colegio_id: int
     college_name: str
     street: Optional[str] = None
@@ -331,17 +342,22 @@ class SchoolbynameRead(BaseModel):
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
+
+
 #===========================================================================================================
+#===========================================================================================================
+2022/10/07
+
+
 	
 from datetime import datetime
 
-from types import UnionType
-
-from typing import Optional, Union
+from typing import Optional
+from typing import Union
 
 from pydantic import BaseModel
 
-class StudentRead(BaseModel):
+class StudentsRead(BaseModel):
     num_control: Optional[int] = None
     student_name: str
     father_name: str
@@ -374,8 +390,10 @@ class StudentsbynameRead(BaseModel):
     status_id: Union[str, int]
     registration_date: datetime
 
-#===========================================================================================================	
 
+
+#===========================================================================================================	
+#===========================================================================================================
 
 
 
