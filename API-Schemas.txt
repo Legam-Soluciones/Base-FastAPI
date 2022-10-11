@@ -1,6 +1,7 @@
 #===========================================================================================================
 session.py
 #===========================================================================================================
+
 from sqlalchemy import create_engine
 
 engine = create_engine(
@@ -11,6 +12,7 @@ engine = create_engine(
 #===========================================================================================================
 session.py
 #===========================================================================================================
+
 from sqlalchemy import create_engine
 
 engine = create_engine(
@@ -43,10 +45,22 @@ engine = create_engine(
 #===========================================================================================================
 api.py
 #===========================================================================================================
+2022/10/07
+
+
 
 from fastapi import APIRouter
 
-from api.v100.routes import students, responsibles, schools, concepts, campus, charges, discounts, schoolarships, payments
+from api.v100.routes import students
+from api.v100.routes import responsibles
+from api.v100.routes import schools
+from api.v100.routes import concepts
+from api.v100.routes import campus
+from api.v100.routes import charges
+from api.v100.routes import discounts
+from api.v100.routes import schoolarships
+from api.v100.routes import payments
+from api.v100.routes import users
 
 router = APIRouter()
 
@@ -56,15 +70,23 @@ router.include_router(schools.router, prefix="/schools")
 router.include_router(concepts.router, prefix="/concepts")
 router.include_router(campus.router, prefix="/campus")
 router.include_router(charges.router, prefix="/charges")
-router.include_router(discounts.router, prefix="/charges")
+router.include_router(discounts.router, prefix="/discounts")
 router.include_router(schoolarships.router, prefix="/schoolarships")
 router.include_router(payments.router, prefix="/payments")
+router.include_router(users.router, prefix="/users")
+
+
+
 
 #===========================================================================================================
 Schemas
 #===========================================================================================================
+2022/10/08
+
+
 
 from datetime import datetime
+
 from typing import Optional
 
 from pydantic import BaseModel
@@ -72,8 +94,8 @@ from pydantic import BaseModel
 class CampusRead(BaseModel):
     campus_name: str
     street: Optional[str] = None
-    suburb: Optional[str] = None
     suburb_id: str
+    suburb: Optional[str] = None    
     municipality_id: Optional[str] = None
     state_id: Optional[str] = None
     zip: str
@@ -85,16 +107,23 @@ class CampusbynameRead(BaseModel):
     campus_id: int
     campus_name: str
     street: Optional[str] = None
-    suburb: Optional[str] = None
     suburb_id: str
+    suburb: Optional[str] = None
     municipality_id: Optional[str] = None
     state_id: Optional[str] = None
     zip: str
     college_id: str
     status_id: str
-    registration_date: datetime            
+    registration_date: datetime  
+
+
+    
             
 #===========================================================================================================	
+#===========================================================================================================	
+2022/10/08
+
+
 
 from datetime import date, datetime
 
@@ -127,7 +156,15 @@ class ChargesbynameRead(BaseModel):
     registration_date: datetime
     transaction_id_old: Optional[str] = None
 	
+    
+    
+    
 #===========================================================================================================	
+#===========================================================================================================
+2022/10/08
+
+
+
 
 from datetime import datetime
 
@@ -135,30 +172,37 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
-class ConceptRead(BaseModel):
+class ConceptsRead(BaseModel):
     concept: Optional[str] = None
     category: Union[str, int]
     provserv_key: Optional[int] = None
-    unit_key: Union[str, int]
+    unit_key: Union[str, int] = None
     college_id: int 
     period_id: Optional[int] = None
     program_id: Optional[int] = None
     level_id: Optional[int] = None
     registration_date: datetime
 
-class ConceptbynameRead(BaseModel):
+class ConceptsbynameRead(BaseModel):
     concept_id: Union[str, int]
     concept: Optional[str] = None
     category: Union[str, int]
     provserv_key: Optional[int] = None
-    unit_key: Union[str, int]
+    unit_key: Union[str, int] = None
     college_id: int 
     period_id: Optional[int] = None
     program_id: Optional[int] = None
     level_id: Optional[int] = None
     registration_date: datetime
 	
+    
+
 #===========================================================================================================	
+#===========================================================================================================
+
+
+
+
 
 from datetime import datetime
 

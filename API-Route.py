@@ -1,31 +1,40 @@
+#===========================================================================================================
+#===========================================================================================================
+2022/10/08
+
+
+
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.campus import CampusRead, CampusbynameRead
+from api.v100.schemas.campus import CampusRead 
+from api.v100.schemas.campus import CampusbynameRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/campus/{id_campus}",
+    "/campus/{campus_id}",
     response_model=List[CampusRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_campus_by_id(
-    id_campus: int
+    campus_id: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_campus where IDCampus = {id_campus}'
+    sql = f'select * from cat_campus where IDCampus = {campus_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     campus = [
         CampusRead(
             campus_name=row[1],
             street=row[2],
-            suburb=row[4],
             suburb_id=row[3],
+            suburb=row[4],
             municipality_id=row[5],
             state_id=row[6],
             zip=row[7],
@@ -38,23 +47,24 @@ async def get_campus_by_id(
     return campus
 
 @router.get(
-    "/campusbyname/{nombre}",
+    "/campus_by_name/{nombre}",
     response_model=List[CampusbynameRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_campus_by_nombre(
-    nombre: str
+    nombre: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_campus where Nombre = \'{nombre}\''
+    sql = f'select * from cat_campus where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
-    campusbyname = [
+    campus_by_name = [
         CampusbynameRead(
             campus_id=row[0],
             campus_name=row[1],
             street=row[2],
-            suburb=row[4],
             suburb_id=row[3],
+            suburb=row[4],
             municipality_id=row[5],
             state_id=row[6],
             zip=row[7],
@@ -64,97 +74,175 @@ async def get_campus_by_nombre(
         )
         for row in result
     ]
-    return campusbyname
+    return campus_by_name
+
+@router.post(
+    "/campus_save/{campus_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_campus(
+    campus_name: int,
+    street: str,
+    suburb_id: int,
+    suburb: str,
+    municipality_id: str,
+    state_id: str,
+    zip: str,
+    college_id: str,
+    status_id: str,
+    registration_date: datetime
+):
+    sql = f'INSERT INTO cat_campus(Nombre, Calle, IDColonia, Colonia, IDMunicipio, IDEstado, ZIP, IDColegio, IDEstatus, Fecha_registro) values(\'{campus_name}\', \'{street}\', \'{suburb_id}\', \'{suburb}\', \'{municipality_id}\', \'{state_id}\', \'{zip}\', \'{college_id}\', \'{status_id}\', \'{registration_date}\')'
+    result = engine.execute(sql)
+    return result
 
 
 
-#====================================================================
+
+#===========================================================================================================
+#===========================================================================================================
+2022/10/08
+
+
+
+
+from datetime import date 
+from datetime import datetime
+
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.charges import ChargesRead, ChargesbynameRead
+from api.v100.schemas.charges import ChargesRead
+from api.v100.schemas.charges import ChargesbynameRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/charges/{id_alumno}",
+    "/charges/{alumno_id}",
     response_model=List[ChargesRead],
-    status_code=http_status.HTTP_200_OK
+    status_code=http_status.HTTP_200_OK,
+
 )
 async def get_charges_by_id(
-    id_alumno: int
+    alumno_id: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_cargos where IDAlumno = {id_alumno}'
+    sql = f'select * from t_cargos where IDAlumno = {alumno_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     charges = [
         ChargesRead(
+            transaction_id=row[1],
             period=row[2],
+            concept_id=row[3],
             concept=row[4],
             amount=row[5],
             balance=row[6],
-            userid=row[7],
+            user_id=row[7],
+            expiration_date=row[8],
             registration_date=row[9],
+            transaction_id_old=row[10]
         )
         for row in result
     ]
     return charges
 
 @router.get(
-     "/chargesbyname/{conceptos}",
+     "/charges_by_name/{conceptos}",
     response_model=List[ChargesbynameRead],
     status_code=http_status.HTTP_200_OK
 )
-async def get_charges_by_name(
-    conceptos: str
+async def get_charges_by_concept(
+    conceptos: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_cargos where Concepto = \'{conceptos}\''
+    sql = f'select * from t_cargos where Concepto = \'{conceptos}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
-    chargesbyname = [
+    charges_by_name = [
         ChargesbynameRead(
-            idalumno= row[0],
+            alumno_id= row[0],
+            transaction_id=row[1],
             period=row[2],
+            concept_id=row[3],
             concept=row[4],
             amount=row[5],
             balance=row[6],
-            userid=row[7],
+            user_id=row[7],
+            expiration_date=row[8],
             registration_date=row[9],
+            transaction_id_old=row[10]
         )
         for row in result   
     ]
-    return chargesbyname    
+    return charges_by_name    
+
+@router.post(
+    "/charges_save/{alumno_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_charges(
+    alumno_id: int,
+    transaction_id: int,
+    period: str,
+    concept: str,
+    concept_id: str,
+    amount: str,
+    balance: str,
+    user_id: int,
+    expiration_date: date,
+    registration_date: datetime,
+    transaction_id_old: str
+):
+    sql = f'insert into t_cargos(IDAlumno, IDTransaccion, Periodo, IDConcepto, Concepto, Monto, Saldo, IDUsuario, Fecha_Vencimiento, Fecha_registro, IDTransaccion_old) values(\'{alumno_id}\', \'{transaction_id}\', \'{period}\', \'{concept}\', \'{concept_id}\', \'{amount}\', \'{balance}\', \'{user_id}\', \'{expiration_date}\', \'{registration_date}\', \'{transaction_id_old}\')'
+    result = engine.execute(sql)
+    return result 
+
+422 Unprocessable Entity 
     
-#====================================================================
+
     
+    
+    
+    
+    
+#===========================================================================================================
+#===========================================================================================================
+200/10/08
+
+
+    
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.concepts import ConceptRead, ConceptbynameRead
+from api.v100.schemas.concepts import ConceptsRead 
+from api.v100.schemas.concepts import ConceptsbynameRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/concepts/{id_conceptos}",
-    response_model=List[ConceptRead],
+    "/concepts/{concepts_id}",
+    response_model=List[ConceptsRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_concepts_by_id(
-    id_conceptos: str
+    concepts_id: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_conceptos where IDConcepto = \'{id_conceptos}\''
+    sql = f'select * from cat_conceptos where IDConcepto = \'{concepts_id}\'order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     concepts = [ 
-        ConceptRead( 
+        ConceptsRead( 
             concept=row[1],
             category=row[2], 
             provserv_key=row[3], 
@@ -169,21 +257,22 @@ async def get_concepts_by_id(
     ]
     for row in result: 
         print(row)
-
     return concepts
 
 @router.get(
-     "/conceptbyname/{concepto}",
-    response_model=List[ConceptbynameRead],
+     "/concepts_by_name/{concepts}",
+    response_model=List[ConceptsbynameRead],
     status_code=http_status.HTTP_200_OK
 )
-async def get_concept_by_name(
-    concepto: str
+async def get_concepts_by_name(
+    concepts: str,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from cat_conceptos where Concepto = \'{concepto}\''
+    sql = f'select * from cat_conceptos where Concepto = \'{concepts}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-    conceptbyname = [
-        ConceptbynameRead(
+    concepts_by_name = [
+        ConceptsbynameRead(
             concept_id=row[0],
             concept=row[1],
             category=row[2], 
@@ -197,51 +286,139 @@ async def get_concept_by_name(
         )
         for row in result   
     ]
-    return conceptbyname
+    return concepts_by_name
+
+@router.post(
+    "/concepts_save/{concept_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_concepts(
+    concept_id: str,
+    concept: str,
+    category: str,
+    provserv_key: str,
+    unit_key: str,
+    college_id: int,
+    period_id: str,
+    program_id: str,
+    level_id: str,
+    registration_date: datetime
+):
+    sql = f'INSERT INTO cat_conceptos(IDConcepto, Concepto, Categoria, ClaveProdServ, ClaveUnidad, IDColegio, IDPeriodo, IDPrograma, IDNivel, Fecha_registro) vlues({concept_id}, {concept}, {category}, {provserv_key}, {unit_key}, {college_id}, {period_id}, {program_id}, {level_id}, {registration_date})'
+    result = engine.execute(sql)
+    return result
     
-#====================================================================   
+    
+    
+    
+#===========================================================================================================
+#===========================================================================================================   
+ 2022/10/10
  
+ 
+ 
+ 
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
 from api.v100.schemas.discounts import DiscountsRead
+from api.v100.schemas.discounts import DiscountstypeRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/discounts/{id_descuento}",
+    "/discounts/{discounts_id}",
     response_model=List[DiscountsRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_discounts_by_id(
-    id_descuento: int
+    discounts_id: int,
+    offset: int = 0,
+    limit: int = 20
 ):
-    sql = f'select * from t_descuentos where IDConfig_D = {id_descuento}'
+    sql = f'select * from t_descuentos where IDConfig_D = {discounts_id} order by Fecha_Aplicacion desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
 
     discounts = [
         DiscountsRead(
-            idconcept=row[1],
-            desctypeid=row[2],
+            concept_id=row[1],
+            desctype_id=row[2],
             days_period=row[3],
             date_application=row[4],
             type_amount=row[5],
             percentage=row[6],
             amount=row[7],
-            idconcept_applies=row[8],
-            idstatus=row[9],
-            userid=row[10],
+            concept_id_applies=row[8],
+            status_id=row[9],
+            user_id=row[10],
             activity_date=row[11]
         )
         for row in result
     ]
     return discounts
 
- #====================================================================
+@router.get(
+    "/discounts_type/{discounts_type_id}",
+    response_model=List[DiscountstypeRead],
+    status_code=http_status.HTTP_200_OK
+)
+async def get_discounts_by_type_discounts(
+    discounts_type_id: int,
+    offset: int = 0,
+    limit: int = 20
+):
+    sql = f'select * from t_descuentos where IDTipoDesc = {discounts_type_id} order by Fecha_Aplicacion desc offset {offset} rows fetch first {limit} rows only'
+    result = engine.execute(sql)
+
+    discounts_type = [
+        DiscountstypeRead(
+            config_id_d=row[0],
+            concept_id=row[1],
+            desctype_id=row[2],
+            days_period=row[3],
+            date_application=row[4],
+            type_amount=row[5],
+            percentage=row[6],
+            amount=row[7],
+            concept_id_applies=row[8],
+            status_id=row[9],
+            user_id=row[10],
+            activity_date=row[11]
+        )
+        for row in result
+    ]
+    return discounts_type
+
+@router.post(
+    "/discounts_save/{concept_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_discounts(
+    concept_id: str,
+    desctype_id: int,
+    days_period: str,
+    type_amount: str,
+    percentage: float,
+    amount: float,
+    concept_id_applies: str,
+    status_id: str,
+    user_id: int,
+    activity_date: datetime
+):
+    sql = f'insert into t_descuentos(IDConcepto, IDTipoDesc, Dias_regla, Tipo_monto, Porcentaje, Monto, IDConcepto_Aplica, IDEstatus, IDUsuario, Fecha_actividad) values(\'{concept_id}\', \'{desctype_id}\', \'{days_period}\', \'{type_amount}\', \'{percentage}\', \'{amount}\', \'{concept_id_applies}\', \'{status_id}\', \'{user_id}\', \'{activity_date}\')'
+    result = engine.execute(sql)
+    return result
+
+
+
+error 422 Unprocessable Entity
+ #===========================================================================================================
+ #===========================================================================================================
  
 from typing import List
 
@@ -399,15 +576,38 @@ async def get_responsibles_by_name(
     ]
     return responsibles_by_name
 
+@router.post(
+    "/responsibles_save/{responsable_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_responsibles(
+    responsable_id: int,
+    college_uid: str,
+    responsable_name: str,
+    father_name: str,
+    mother_name: str,
+    curp: str,
+    email: str,
+    phone: str,
+    contact_pref: str,
+    alumno_id: int,
+    status_id: str
+):
+    sql = f'INSERT INTO t_responsable(IDResponsable, UIDColegio, Nombre, A_Paterno, A_Materno, CURP, Email, Telefono, Contacto_Pref, IDAlumno, IDEstatus) value(\'{responsable_id}\', \'{college_uid}\', \'{responsable_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{email}\', \'{phone}\', \'{contact_pref}\', \'{alumno_id}\', \'{status_id}\')'
+    result = engine.execute(sql)
+    return result
+
 
 
 
 
 #===========================================================================================================
 #===========================================================================================================
+2022/10/10 
     
     
-    
+from datetime import datetime
+
 from typing import List
 
 from fastapi import APIRouter
@@ -420,38 +620,62 @@ from db.sessions import engine
 router = APIRouter()
 
 @router.get(
-    "/schoolarships/{id_becas}",
+    "/schoolarships/{schoolarships_id_b}",
     response_model=List[SchoolarshipsRead],
     status_code=http_status.HTTP_200_OK
 )
-async def get_discounts_by_id(
-    id_becas: int
+async def get_Schoolarships_by_id(
+    schoolarships_id_b: int,
+    offset: int = 0,
+    limit: int = 50
 ):
-    sql = f'select * from t_becas where IDConfig_B = {id_becas}'
+    sql = f'select * from t_becas where IDConfig_B = {schoolarships_id_b} order by Tipo_monto desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
-
     schoolarships = [
         SchoolarshipsRead(
-            idconcept=row[1],
+            concept_id=row[1],
             type_amount=row[2],
             percentage=row[3],
             amount=row[4],
-            idconcept_applies=row[5],
+            concept_applies_id=row[5],
             reason=row[6],
-            idstatus=row[7],
-            userid=row[8],
+            status_id=row[7],
+            user_id=row[8],
             activity_date=row[9]
         )
         for row in result
     ]
     return schoolarships
-    
+
+@router.post(
+    "/schoolarships_save/{concept_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_schoolarships( 
+    concept_id: str,
+    type_amount: str,
+    percentage: float,
+    amount: float,
+    concept_applies_id: str,
+    status_id: str,
+    user_id: int,
+    activity_date: datetime
+):
+    sql = f'insert into t_becas(IDConcepto, Tipo_monto, Porcentaje, Monto , IDConcepto_Aplica, IDEstatus, IDUsuario, Fecha_actividad) values({concept_id}, {type_amount}, {percentage}, {amount}, {concept_applies_id}, {status_id}, {user_id}, {activity_date})'
+    result = engine.execute(sql)
+    return result
+
+
+
+
+error 422 Unprocessable Entity    
 #===========================================================================================================
 #===========================================================================================================
 2022/10/07
 
 
 
+from datetime import datetime
 
 from typing import List
 
@@ -525,12 +749,36 @@ async def get_schools_by_nombre(
         for row in result
     ]
     return schools_by_name
+
+@router.post(
+    "/schools_save/{colegio_id}",
+    status_code=http_status.HTTP_201_CREATED
+)
+async def save_schools(
+    colegio_id: int,
+    college_name: str,
+    street: str,
+    suburb_id: int,
+    suburb: str,    
+    municipality_id: int,
+    state_id: int,
+    zip: int,
+    status_id: str,
+    registration_date: datetime,
+    c_cards: float,
+    c_oxxo: float
+):
+    sql = f'insert into cat_colegios(IDColegio, Nombre, Calle, IDColonia, Colonia, IDMunicipio, IDEstado, ZIP, IDEstatus, Fecha_registro, C_tarjetas, C_oxxo) values(\'{colegio_id}\', \'{college_name}\', \'{street}\', \'{suburb_id}\', \'{suburb}\', \'{municipality_id}\', \'{state_id}\', \'{zip}\', \'{status_id}\', \'{registration_date}\', \'{c_cards}\', \'{c_oxxo}\')'
+    result = engine.execute(sql)
+    return result
     
+
     
-    
+error 422 Unprocessable Entity 
 #===========================================================================================================
 #===========================================================================================================
 2022/10/07
+
 
 
 
