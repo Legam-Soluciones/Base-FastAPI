@@ -390,11 +390,9 @@ class SchoolsbynameRead(BaseModel):
 
 #===========================================================================================================
 #===========================================================================================================
-2022/10/07
+UPDATE 2022/10/10
 
-
-	
-from datetime import datetime
+from datetime import date
 
 from typing import Optional
 from typing import Union
@@ -415,10 +413,10 @@ class StudentsRead(BaseModel):
     degree: Optional[str] = None
     cluster: Optional[str] = None
     status_id: Union[str, int]
-    registration_date: datetime
+    registration_date: date
     
 class StudentsbynameRead(BaseModel):
-    alumno_id: int
+    student_id: int
     num_control: Optional[str] = None
     student_name: str
     father_name: str
@@ -432,8 +430,7 @@ class StudentsbynameRead(BaseModel):
     degree: Optional[str] = None
     cluster: Optional[str] = None
     status_id: Union[str, int]
-    registration_date: datetime
-
+    registration_date: date
 
 
 #===========================================================================================================	

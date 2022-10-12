@@ -493,13 +493,13 @@ async def get_payments_by_id_transaccion(
 
 #===========================================================================================================
 #===========================================================================================================
-2022/10/07
+#===========================================================================================================
 
+UPDATE 2022/10/11
 
+from datetime import date
 
-from datetime import datetime
-
-from typing import List, Union
+from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
@@ -512,21 +512,21 @@ from db.sessions import engine
 router = APIRouter()
 
 @router.get(
-    "/responsibles/{responsable_id}",
+    "/responsibles/{responsibles_id}",
     response_model=List[ResponsiblesRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_responsibles_by_id(
-    responsable_id: int,
+    responsibles_id: int,
     offset: int = 0,
     limit: int = 20
 ):
-    sql = f'select * from t_responsable where IDResponsable = {responsable_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    sql = f'select * from t_responsable where IDResponsable = {responsibles_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
     responsibles_by_id = [
         ResponsiblesRead(
             college_id=row[1],
-            responsable_name= row[2],
+            responsibles_name= row[2],
             father_name= row[3],
             mother_name= row[4],
             college_uid= row[1],
@@ -535,7 +535,7 @@ async def get_responsibles_by_id(
             phone= row[7],
             contact_pref=row[8],
             alumno_id= row[9],
-            status= row[10],
+            status_id= row[10],
             registration_date=row[11],
             activity_date= row[12]
         )
@@ -557,9 +557,9 @@ async def get_responsibles_by_name(
     result = engine.execute(sql)
     responsibles_by_name = [
         ResponsiblesbynameRead(
-            responsable_id= row[0],
+            responsibles_id= row[0],
             college_id=row[1],
-            responsable_name= row[2],
+            responsibles_name= row[2],
             father_name= row[3],
             mother_name= row[4],
             college_uid= row[1],
@@ -568,7 +568,7 @@ async def get_responsibles_by_name(
             phone= row[7],
             contact_pref=row[8],
             alumno_id= row[9],
-            status= row[10],
+            status_id= row[10],
             registration_date=row[11],
             activity_date= row[12]
         )
@@ -577,29 +577,30 @@ async def get_responsibles_by_name(
     return responsibles_by_name
 
 @router.post(
-    "/responsibles_save/{responsable_id}",
+    "/responsibles_save/{responsibles_id}",
     status_code=http_status.HTTP_201_CREATED
 )
-async def save_responsibles(
-    responsable_id: int,
+async def post_responsibles(
+    responsibles_id: str,
     college_uid: str,
-    responsable_name: str,
+    responsibles_name: str,
     father_name: str,
     mother_name: str,
     curp: str,
     email: str,
     phone: str,
     contact_pref: str,
-    alumno_id: int,
-    status_id: str
+    alumno_id: str,
+    status_id: str,
+    registration_date: date,
+    activity_date: date
 ):
-    sql = f'INSERT INTO t_responsable(IDResponsable, UIDColegio, Nombre, A_Paterno, A_Materno, CURP, Email, Telefono, Contacto_Pref, IDAlumno, IDEstatus) value(\'{responsable_id}\', \'{college_uid}\', \'{responsable_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{email}\', \'{phone}\', \'{contact_pref}\', \'{alumno_id}\', \'{status_id}\')'
+    sql = f'INSERT INTO t_responsable(IDResponsable, UIDColegio, Nombre, A_Paterno, A_Materno, CURP, Email, Telefono, Contacto_Pref, IDAlumno, IDEstatus, Fecha_registro, Fecha_actividad) value(\'{responsibles_id}\', \'{college_uid}\', \'{responsibles_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{email}\', \'{phone}\', \'{contact_pref}\', \'{alumno_id}\', \'{status_id}\', \'{registration_date}\', \'{activity_date}\')'
     result = engine.execute(sql)
     return result
 
-
-
-
+ERROR
+(Background on this error at: https://sqlalche.me/e/14/f405)
 
 #===========================================================================================================
 #===========================================================================================================
@@ -668,7 +669,7 @@ async def save_schoolarships(
 
 
 
-error 422 Unprocessable Entity    
+#error 422 Unprocessable Entity
 #===========================================================================================================
 #===========================================================================================================
 2022/10/07
@@ -777,33 +778,36 @@ async def save_schools(
 error 422 Unprocessable Entity 
 #===========================================================================================================
 #===========================================================================================================
-2022/10/07
+#===========================================================================================================
+
+UPDATE 2022/10/10
 
 
-
+from datetime import date
 
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
 
-from api.v100.schemas.students import StudentsRead, StudentsbynameRead
+from api.v100.schemas.students import StudentsRead 
+from api.v100.schemas.students import StudentsbynameRead
 
 from db.sessions import engine
 
 router = APIRouter()
 
 @router.get(
-    "/students/{id_alumno}",
+    "/students/",
     response_model=List[StudentsRead],
     status_code=http_status.HTTP_200_OK
 )
 async def get_students_by_id(
-    id_alumno: int,
+    student_id: int,
     offset: int = 0,
     limit: int = 20
 ):
-    sql = f'select * from t_alumno where IDAlumno = {id_alumno} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    sql = f'select * from t_alumno where IDAlumno = {student_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
     result = engine.execute(sql)
     students = [
         StudentsRead(   
@@ -827,7 +831,7 @@ async def get_students_by_id(
     return students
 
 @router.get(
-     "/students_by_name/{nombre}",
+     "/students_by_name/",
     response_model=List[StudentsbynameRead],
     status_code=http_status.HTTP_200_OK
 )
@@ -840,7 +844,7 @@ async def get_students_by_name(
     result = engine.execute(sql)
     students_by_name = [
         StudentsbynameRead(
-            alumno_id= row[0],
+            student_id=row[0],
             num_control=row[1],
             student_name=row[2],
             father_name=row[3],
@@ -861,11 +865,11 @@ async def get_students_by_name(
     return students_by_name
 
 @router.post(
-    "/students_save/{alumno_id}",
+    "/students_save/",
     status_code=http_status.HTTP_201_CREATED
 )
-async def save_students(
-    alumno_id: str,
+async def post_students(
+    student_id: str,
     num_control: str,
     student_name: str,
     father_name: str,
@@ -876,14 +880,15 @@ async def save_students(
     college_id: str,
     degree: str,
     cluster: str,
-    status_id: str
+    status_id: str,
+    registration_date: date
     ):
-    sql = f'INSERT INTO t_alumno (IDAlumno, No_Control, Nombre, A_Paterno, A_Materno, CURP, Nivel, ClaveIncorporacion, IDColegio, Grado, Grupo, IDEstatus) values (\'{alumno_id}\', \'{num_control}\', \'{student_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{level}\', \'{incorporation_key}\', \'{college_id}\', \'{degree}\', \'{cluster}\', \'{status_id}\')'
+    sql = f'INSERT INTO t_alumno (IDAlumno, No_Control, Nombre, A_Paterno, A_Materno, CURP, Nivel, ClaveIncorporacion, IDColegio, Grado, Grupo, IDEstatus, Fecha_registro) values (\'{student_id}\', \'{num_control}\', \'{student_name}\', \'{father_name}\', \'{mother_name}\', \'{curp}\', \'{level}\', \'{incorporation_key}\', \'{college_id}\', \'{degree}\', \'{cluster}\', \'{status_id}\', \'{registration_date}\')'
     result = engine.execute(sql)
     return result
 
 
-
+#===========================================================================================================
 #===========================================================================================================
 #===========================================================================================================
 
