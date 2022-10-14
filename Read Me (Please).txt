@@ -34,7 +34,8 @@
 			PS D:\legam\Desktop\base_api> poetry run uvicorn main:app --reload --port 9999
 			
 10)
-			
+			pip install tortoise-orm
+			pip install python-multipart fastapi uvicorn pydantic
 ********************************************************************************************************************			
 
 "ConnectionStrings": {

@@ -81,9 +81,8 @@ router.include_router(users.router, prefix="/users")
 #===========================================================================================================
 Schemas
 #===========================================================================================================
-2022/10/08
-
-
+2022/10/08 CAMPUS
+#===========================================================================================================
 
 from datetime import datetime
 
@@ -114,16 +113,25 @@ class CampusbynameRead(BaseModel):
     zip: str
     college_id: str
     status_id: str
-    registration_date: datetime  
+    registration_date: datetime            
 
-
-    
-            
+class CampusPost(BaseModel):
+    campus_name: str
+    street: Optional[str] = None
+    suburb_id: str
+    suburb: Optional[str] = None
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
+    zip: str
+    college_id: str
+    status_id: str
+    registration_date: datetime 
+   
 #===========================================================================================================	
 #===========================================================================================================	
-2022/10/08
-
-
+#===========================================================================================================	
+2022/10/08 CHARGES
+#===========================================================================================================	
 
 from datetime import date, datetime
 
@@ -131,49 +139,64 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-class ChargesRead(BaseModel):
+
+class ChargeRead(BaseModel):
     transaction_id: int
     period: Optional[str] = None
     concept: Optional[str] = None
     concept_id: Optional[str] = None
     amount: str
     balance: str
-    userid: int
+    user_id: int
     expiration_date: date
-    registration_date: datetime
+    registration_date: datetime 
     transaction_id_old: Optional[str] = None
-  
-class ChargesbynameRead(BaseModel):   
-    alumno_id: int
+
+
+class ChargebynameRead(BaseModel):   
+    student_id: int
     transaction_id: int
     period: Optional[str] = None
     concept: Optional[str] = None
     concept_id: Optional[str] = None
     amount: str
     balance: str
-    userid: int
+    user_id: int
     expiration_date: date
-    registration_date: datetime
+    registration_date: datetime 
     transaction_id_old: Optional[str] = None
-	
+
+
+class ChargeCreate(BaseModel):
+    student_id: int
+    transaction_id: int
+    period: Optional[str] = None
+    concept: Optional[str] = None
+    concept_id: Optional[str] = None
+    amount: str
+    balance: str
+    user_id: int
+    expiration_date: date
+    registration_date: date
+    transaction_id_old: Optional[str] = None
     
     
-    
+#===========================================================================================================	        
 #===========================================================================================================	
 #===========================================================================================================
-2022/10/08
-
-
-
+2022/10/12 CONCETPS
+#===========================================================================================================	
 
 from datetime import datetime
 
-from typing import Optional, Union
+from typing import Optional 
+from typing import Union
+
 
 from pydantic import BaseModel
 
 class ConceptsRead(BaseModel):
-    concept: Optional[str] = None
+    concepts: Optional[str] = None
     category: Union[str, int]
     provserv_key: Optional[int] = None
     unit_key: Union[str, int] = None
@@ -181,10 +204,10 @@ class ConceptsRead(BaseModel):
     period_id: Optional[int] = None
     program_id: Optional[int] = None
     level_id: Optional[int] = None
-    registration_date: datetime
-
+    registration_date: datetime = datetime.now() 
+    
 class ConceptsbynameRead(BaseModel):
-    concept_id: Union[str, int]
+    concepts_id: Union[str, int]
     concept: Optional[str] = None
     category: Union[str, int]
     provserv_key: Optional[int] = None
@@ -193,7 +216,19 @@ class ConceptsbynameRead(BaseModel):
     period_id: Optional[int] = None
     program_id: Optional[int] = None
     level_id: Optional[int] = None
-    registration_date: datetime
+    registration_date: datetime = datetime.now() 
+
+class ConceptsbyInsert(BaseModel):
+    concepts_id: Union[str, int]
+    concepts: Optional[str] = None
+    category: Union[str, int]
+    provserv_key: Optional[int] = None
+    unit_key: Union[str, int] = None
+    college_id: int 
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
+    registration_date: datetime = datetime.now() 
 	
     
 
@@ -438,4 +473,9 @@ class StudentsbynameRead(BaseModel):
 
 
 
+
+Buenos dias a todos equipo.
+La frase de hoy es del autor Jahn, Federico Luis:
+"El secreto para vivir en paz con todos consiste en el arte de comprender a cada uno según su individualidad."
+Que todos pasen un lindo Jueves.
 
