@@ -362,16 +362,15 @@ class ResponsiblesbynameRead(BaseModel):
 
 #===========================================================================================================
 #===========================================================================================================	
+2022/10/14
 
-
-from datetime import datetime
+from datetime import date
 
 from typing import Optional
 
 from pydantic import BaseModel
 
 class SchoolarshipsRead(BaseModel):
-    config_id_b: int
     concept_id: str
     type_amount: str
     percentage: Optional[float] = None
@@ -380,21 +379,32 @@ class SchoolarshipsRead(BaseModel):
     reason: Optional[str] = None
     status_id: str
     user_id: int
-    activity_date: datetime
+    activity_date: date
+
+class SchoolarshipCreate(BaseModel):
+    concept_id: str
+    type_amount: str
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_applies_id: str
+    reason: Optional[str] = None
+    status_id: str
+    user_id: int
+    activity_date: date
+
 
 #===========================================================================================================	
 #===========================================================================================================
 2022/10/07
 
 
-
-from datetime import datetime
+from datetime import date
 
 from typing import Optional
 
 from pydantic import BaseModel
 
-class SchoolsRead(BaseModel):
+class SchoolRead(BaseModel):
     college_name: str
     street: Optional[str] = None
     suburb: Optional[str] = None
@@ -403,12 +413,12 @@ class SchoolsRead(BaseModel):
     state_id: Optional[int] = None
     zip: int
     status_id: str
-    registration_date: datetime
+    registration_date: date
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
-class SchoolsbynameRead(BaseModel):
-    colegio_id: int
+class SchoolbynameRead(BaseModel):
+    college_id: int
     college_name: str
     street: Optional[str] = None
     suburb: Optional[str] = None
@@ -417,7 +427,21 @@ class SchoolsbynameRead(BaseModel):
     state_id: Optional[int] = None
     zip: int
     status_id: str
-    registration_date: datetime
+    registration_date: date
+    c_cards: Optional[float] = None 
+    c_oxxo: Optional[float] = None
+
+class SchoolCreate(BaseModel):
+    college_id: int
+    college_name: str
+    street: Optional[str] = None
+    suburb_id: int
+    suburb: Optional[str] = None   
+    municipality_id: Optional[int] = None
+    state_id: Optional[int] = None
+    zip: int
+    status_id: str
+    registration_date: date
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
@@ -434,7 +458,7 @@ from typing import Union
 
 from pydantic import BaseModel
 
-class StudentsRead(BaseModel):
+class StudentRead(BaseModel):
     num_control: Optional[int] = None
     student_name: str
     father_name: str
@@ -450,7 +474,24 @@ class StudentsRead(BaseModel):
     status_id: Union[str, int]
     registration_date: date
     
-class StudentsbynameRead(BaseModel):
+class StudentbynameRead(BaseModel):
+    student_id: int
+    num_control: Optional[str] = None
+    student_name: str
+    father_name: str
+    mother_name: Optional[str] = None    
+    curp: str
+    level_id: Optional[int] = None
+    level: Optional[str] = None
+    incorporation_key: Optional[str] = None
+    college_id: int
+    campus_id: Optional[str] = None
+    degree: Optional[str] = None
+    cluster: Optional[str] = None
+    status_id: Union[str, int]
+    registration_date: date
+
+class StudentCreate(BaseModel):
     student_id: int
     num_control: Optional[str] = None
     student_name: str
@@ -475,7 +516,7 @@ class StudentsbynameRead(BaseModel):
 
 
 Buenos dias a todos equipo.
-La frase de hoy es del autor Jahn, Federico Luis:
-"El secreto para vivir en paz con todos consiste en el arte de comprender a cada uno según su individualidad."
-Que todos pasen un lindo Jueves.
-
+La frase de hoy es del autor Fellini, Federico:
+"Un buen vino es como una buena película: dura un instante y te deja en la boca un sabor a gloria; es nuevo en cada sorbo y , como ocurre con las películas, nace y renace en cada saboreador."
+Que todos pasen un lindo Viernes, vispera de fin de semana.
+                                                                                                                                                                    
