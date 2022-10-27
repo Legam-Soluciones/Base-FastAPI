@@ -1,8 +1,6 @@
 #===========================================================================================================
 #===========================================================================================================
-
-2022/10/13 CAMPUS / CAMPUS
-
+2022/10/13 CAMPUS / CAMPUS #100%
 #===========================================================================================================
 #===========================================================================================================
 
@@ -118,14 +116,11 @@ async def post_campus(
     result = engine.execute(sql)
     return result
 
-
 #===========================================================================================================
 #===========================================================================================================
-
-2022/10/013 CHARGES / PAGOS
+2022/10/013 CHARGES / CARGOS #100%
 #===========================================================================================================
 #===========================================================================================================
-
 
 from typing import List
 
@@ -240,15 +235,13 @@ async def create_charge(
     result = engine.execute(sql)
     return result
     
-    
 #===========================================================================================================
 #===========================================================================================================
-200/10/12 CONCEPTS / Conceptos
+200/10/12 CONCEPTS / CONCEPTOS #100%
 #===========================================================================================================
 #===========================================================================================================
 
-
-   from typing import List
+ from typing import List
 
 from fastapi import APIRouter
 from fastapi import status as http_status
@@ -273,7 +266,7 @@ async def get_concepts_by_id(
     result = engine.execute(sql)
     concepts = [ 
         ConceptRead( 
-            concepts=row[1],
+            concept=row[1],
             category=row[2], 
             provserv_key=row[3], 
             unit_key=row[4],
@@ -303,7 +296,7 @@ async def get_concepts_by_concept(
     result = engine.execute(sql)
     concepts_by_concept = [
         ConceptbynameRead(
-            concepts_id=row[0],
+            concept_id=row[0],
             concept=row[1],
             category=row[2], 
             provserv_key=row[3], 
@@ -321,13 +314,14 @@ async def get_concepts_by_concept(
     return concepts_by_concept
 
 @router.post(
-    "/create_concepts/",
+    "/create_concepts",
     name="create_concepts",
     status_code=http_status.HTTP_201_CREATED
 )
 async def create_concepts(
     concept_create: ConceptCreate
-):
+): 
+    print(concept_create)
     sql = f""" 
             insert into cat_conceptos(
                 IDConcepto, 
@@ -342,7 +336,7 @@ async def create_concepts(
                 Fecha_registro
             ) 
             values(
-                \'{concept_create.concepts_id}\', 
+                \'{concept_create.concept_id}\', 
                 \'{concept_create.concept}\', 
                 \'{concept_create.category}\', 
                 \'{concept_create.provserv_key}\', 
@@ -357,14 +351,11 @@ async def create_concepts(
     result = engine.execute(sql)
     return result
 
-#ERROR 422 Unprocessable Entity
-    
 #===========================================================================================================
 #===========================================================================================================   
- 2022/10/13 discounts / descuentos
+ 2022/10/13 discounts / DESCUENTOS #100%
 #===========================================================================================================
 #===========================================================================================================
- 
  
 from typing import List
 
@@ -456,7 +447,8 @@ async def create_discounts(
             insert into t_descuentos(
                 IDConcepto, 
                 IDTipoDesc, 
-                Dias_regla, 
+                Dias_regla,
+                Fecha_Aplicacion, 
                 Tipo_monto, 
                 Porcentaje, 
                 Monto, 
@@ -469,6 +461,7 @@ async def create_discounts(
                 \'{discounts_create.concept_id}\', 
                 \'{discounts_create.desctype_id}\', 
                 \'{discounts_create.days_period}\', 
+                \'{discounts_create.date_application}\',
                 \'{discounts_create.type_amount}\', 
                 \'{discounts_create.percentage}\', 
                 \'{discounts_create.amount}\', 
@@ -481,10 +474,9 @@ async def create_discounts(
     result = engine.execute(sql)
     return result
     
-    
  #===========================================================================================================
  #===========================================================================================================
- 2022/10/14  payments / pagos
+ 2022/10/14  payments / PAGOS #100%
  #===========================================================================================================
  #===========================================================================================================
 
@@ -500,11 +492,11 @@ from db.sessions import engine
 router = APIRouter()
 
 @router.get(    
-    "/payments/",
+    "/payments_by_id_student/",
     response_model=List[PaymentRead],
     status_code=http_status.HTTP_200_OK 
 )
-async def get_payments_by_id_alumno(    
+async def get_payments_by_id_student(    
     student_id: int,
     offset: int = 0,
     limit: int = 20  
@@ -535,7 +527,7 @@ async def get_payments_by_id_alumno(
     return payments
 
 @router.get(
-    "/paymentsbytransaccion/",
+    "/payments_by_id_transaccion/",
     response_model=List[PaymentbytransaccionRead],
     status_code=http_status.HTTP_200_OK
 )
@@ -576,7 +568,7 @@ async def get_payments_by_id_transaccion(
     status_code=http_status.HTTP_201_CREATED
 )  
 async def create_discounts(
-    payments_create: PaymentCreate
+    payment_create: PaymentCreate
 ):  
     sql = f"""
             insert into t_pagos(
@@ -597,33 +589,31 @@ async def create_discounts(
                 IDTransaccion_Cargo_old
             ) 
             values(
-                \'{payments_create.student_id}\',
-                \'{payments_create.transaction_id}\',
-                \'{payments_create.transaction_charge_id}\',
-                \'{payments_create.concepts_id}\',
-                \'{payments_create.concepts}\',
-                \'{payments_create.payment_amount}\',
-                \'{payments_create.amount_applied}\',
-                \'{payments_create.status_id}\',
-                \'{payments_create.uid_cfdi}\',
-                \'{payments_create.payment_id}\',
-                \'{payments_create.user_id}\',
-                \'{payments_create.pay_day}\',
-                \'{payments_create.registration_date}\',
-                \'{payments_create.transaction_id_old}\',
+                \'{payment_create.student_id}\',
+                \'{payment_create.transaction_id}\',
+                \'{payment_create.transaction_charge_id}\',
+                \'{payment_create.concepts_id}\',
+                \'{payment_create.concepts}\',
+                \'{payment_create.payment_amount}\',
+                \'{payment_create.amount_applied}\',
+                \'{payment_create.status_id}\',
+                \'{payment_create.uid_cfdi}\',
+                \'{payment_create.payment_id}\',
+                \'{payment_create.user_id}\',
+                \'{payment_create.pay_day}\',
+                \'{payment_create.registration_date}\',
+                \'{payment_create.transaction_id_old}\',
+                \'{payment_create.transaction_id_charge_old}\'
             )
             """
     result = engine.execute(sql)
     return result
 
-#422 Unprocessable Entity
-
 #===========================================================================================================
 #===========================================================================================================
-2022/10/14 RESPONSABLE / responsibles
+2022/10/14 RESPONSIBLES / RESPONSABLE  # ERROR (Background on this error at: https://sqlalche.me/e/14/f405)
 #===========================================================================================================
 #===========================================================================================================
-
 
 from datetime import date
 
@@ -745,14 +735,15 @@ async def post_responsibles(
             """
     result = engine.execute(sql)
     return result
-#===========================================================================================================
-#===========================================================================================================
-2022/10/12 BECAS / schoolarships
-#===========================================================================================================
-#===========================================================================================================
-   
     
+#===========================================================================================================
+#===========================================================================================================
+2022/10/12 BECAS / schoolarships #100%
+#===========================================================================================================
+#===========================================================================================================
+     
 from datetime import datetime
+
 from typing import List
 
 from fastapi import APIRouter
@@ -823,12 +814,11 @@ async def post_schoolarships(
             )
             """
     result = engine.execute(sql)
-    return result
-    
-    
+    return resultt
+     
 #===========================================================================================================
 #===========================================================================================================
-2022/10/12 SCHOOLS / colegios
+2022/10/12 SCHOOLS / colegios #100%
 #===========================================================================================================
 #===========================================================================================================
 
@@ -950,16 +940,13 @@ async def create_schools(
             """
     result = engine.execute(sql)
     return result
+  
     
-    
 #===========================================================================================================
 #===========================================================================================================
-2022/10/12 STUDENTS / alumnos
+2022/10/19 STUDENTS / Alumnos #100%
 #===========================================================================================================
 #===========================================================================================================
-
-UPDATE 2022/10/10
-
 
 from datetime import date
 
@@ -988,7 +975,7 @@ async def get_students_by_id(
     result = engine.execute(sql)
     students = [
         StudentRead(   
-            num_control=row[1],
+            control_num=row[1],
             student_name=row[2],
             father_name=row[3],
             mother_name=row[4],            
@@ -1024,7 +1011,7 @@ async def get_students_by_name(
     students_by_name = [
         StudentbynameRead(
             student_id=row[0],
-            num_control=row[1],
+            control_num=row[1],
             student_name=row[2],
             father_name=row[3],
             mother_name=row[4],
@@ -1071,7 +1058,7 @@ async def post_students(
                 )
                 values(
                     \'{student_create.student_id}\', 
-                    \'{student_create.num_control}\', 
+                    \'{student_create.control_num}\', 
                     \'{student_create.student_name}\', 
                     \'{student_create.father_name}\', 
                     \'{student_create.mother_name}\', 
@@ -1088,6 +1075,127 @@ async def post_students(
     result = engine.execute(sql)
     return result
 
+#===========================================================================================================
+#===========================================================================================================
+2022/10/19 USER / USUARIOS 
+#===========================================================================================================
+#===========================================================================================================
+
+from fastapi import APIRouter
+
+from typing import List
+
+from fastapi import status as http_status
+
+from api.v100.schemas.users import UsersRead, UsersbynameRead, UsersAllRead
+
+from db.sessions import engine
+
+router = APIRouter()
+
+@router.get(
+    "/users/",
+    response_model=List[UsersRead],
+    status_code=http_status.HTTP_200_OK
+)
+async def get_users_by_id(
+    usuario_id: int,
+    offset: int = 0,
+    limit: int = 20
+):
+    sql = f'select * from t_usuarios where IDUsuario = {usuario_id} order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    result = engine.execute(sql)
+    users = [
+        UsersRead(   
+            users_type=row[1],
+            users_name=row[2],
+            father_name=row[3],
+            mother_name=row[4],            
+            college_id=row[5],
+            rol_id=row[6],
+            status_id=row[7],
+            password=row[8],
+            email=row[9],
+            registration_date=row[10],
+            activity_date=row[11]
+        )
+        for row in result
+    ]
+    for row in result: 
+        print(row)
+    return users
+
+@router.get(
+    "/users_by_name/",
+    response_model=List[UsersbynameRead],
+    status_code=http_status.HTTP_200_OK
+)
+async def get_users_by_name(
+    nombre: str,
+    offset: int = 0,
+    limit: int = 20
+):
+    sql = f'select * from t_usuarios where Nombre = \'{nombre}\' order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    result = engine.execute(sql)
+    users_by_name = [
+        UsersbynameRead(   
+            usuario_id=row[0],
+            users_type=row[1],
+            users_name=row[2],
+            father_name=row[3],
+            mother_name=row[4],            
+            college_id=row[5],
+            rol_id=row[6],
+            status_id=row[7],
+            password=row[8],
+            email=row[9],
+            registration_date=row[10],
+            activity_date=row[11]
+        )
+        for row in result
+    ]
+    for row in result: 
+        print(row)
+    return users_by_name
+
+@router.get(
+    "/users_get/",
+    response_model=List[UsersAllRead],
+    status_code=http_status.HTTP_200_OK
+)
+async def get_users_All(
+    offset: int = 0,
+    limit: int = 20
+):
+    sql = f'select * from t_usuarios order by Fecha_registro desc offset {offset} rows fetch first {limit} rows only'
+    result = engine.execute(sql)
+    users_get = [
+        UsersAllRead(   
+            usuario_id=row[0],
+            users_type=row[1],
+            users_name=row[2],
+            father_name=row[3],
+            mother_name=row[4],            
+            college_id=row[5],
+            rol_id=row[6],
+            status_id=row[7],
+            password=row[8],
+            email=row[9],
+            registration_date=row[10],
+            activity_date=row[11]
+        )
+        for row in result
+    ]
+    for row in result: 
+        print(row)
+    return users_get
+    
+#===========================================================================================================
+#===========================================================================================================
+#===========================================================================================================
+#===========================================================================================================
+#===========================================================================================================
+#===========================================================================================================
 #===========================================================================================================
 #===========================================================================================================
 #===========================================================================================================

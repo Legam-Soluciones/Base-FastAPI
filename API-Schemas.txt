@@ -1,5 +1,5 @@
 #===========================================================================================================
-session.py
+session.py  mattilda-prod
 #===========================================================================================================
 
 from sqlalchemy import create_engine
@@ -10,7 +10,7 @@ engine = create_engine(
 )
 
 #===========================================================================================================
-session.py
+session.py  mattilda-dev
 #===========================================================================================================
 
 from sqlalchemy import create_engine
@@ -21,7 +21,7 @@ engine = create_engine(
 )
 
 #===========================================================================================================
-session.py
+session.py  mattilda-dev
 #===========================================================================================================
 
 from sqlalchemy import create_engine
@@ -32,7 +32,7 @@ engine = create_engine(
 )
 
 #===========================================================================================================
-session.py
+session.py   mattilda-sandbox
 #===========================================================================================================
 
 from sqlalchemy import create_engine
@@ -46,8 +46,6 @@ engine = create_engine(
 api.py
 #===========================================================================================================
 2022/10/07
-
-
 
 from fastapi import APIRouter
 
@@ -76,15 +74,17 @@ router.include_router(payments.router, prefix="/payments")
 router.include_router(users.router, prefix="/users")
 
 
-
-
+#===========================================================================================================
 #===========================================================================================================
 Schemas
 #===========================================================================================================
-2022/10/08 CAMPUS
+#===========================================================================================================
+2022/10/19 CAMPUS / CAMPUS #100%
+#===========================================================================================================
 #===========================================================================================================
 
-from datetime import datetime
+
+from datetime import date
 
 from typing import Optional
 
@@ -93,276 +93,313 @@ from pydantic import BaseModel
 class CampusRead(BaseModel):
     campus_name: str
     street: Optional[str] = None
-    suburb_id: str
-    suburb: Optional[str] = None    
+    suburb_id: int
+    suburb: Optional[str] = None
     municipality_id: Optional[str] = None
     state_id: Optional[str] = None
     zip: str
     college_id: str
     status_id: str
-    registration_date: datetime
-
+    registration_date: date
+    
 class CampusbynameRead(BaseModel):
     campus_id: int
     campus_name: str
     street: Optional[str] = None
-    suburb_id: str
+    suburb_id: int
     suburb: Optional[str] = None
     municipality_id: Optional[str] = None
     state_id: Optional[str] = None
     zip: str
     college_id: str
     status_id: str
-    registration_date: datetime            
+    registration_date: date      
 
-class CampusPost(BaseModel):
+class CampusCreate(BaseModel):
     campus_name: str
     street: Optional[str] = None
-    suburb_id: str
+    suburb_id: int
     suburb: Optional[str] = None
     municipality_id: Optional[str] = None
     state_id: Optional[str] = None
     zip: str
     college_id: str
     status_id: str
-    registration_date: datetime 
+    registration_date: date
    
 #===========================================================================================================	
 #===========================================================================================================	
+2022/10/19 CHARGES / CARGOS #100%
 #===========================================================================================================	
-2022/10/08 CHARGES
 #===========================================================================================================	
 
-from datetime import date, datetime
+from datetime import date
 
 from typing import Optional
 
 from pydantic import BaseModel
 
-
 class ChargeRead(BaseModel):
-    transaction_id: int
+    transaction_id: str
     period: Optional[str] = None
     concept: Optional[str] = None
     concept_id: Optional[str] = None
-    amount: str
-    balance: str
+    amount: float
+    balance: float
     user_id: int
     expiration_date: date
-    registration_date: datetime 
+    registration_date: date
     transaction_id_old: Optional[str] = None
-
-
+  
 class ChargebynameRead(BaseModel):   
-    student_id: int
-    transaction_id: int
+    student_id: str
+    transaction_id: str
     period: Optional[str] = None
     concept: Optional[str] = None
     concept_id: Optional[str] = None
-    amount: str
-    balance: str
+    amount: float
+    balance: float
     user_id: int
     expiration_date: date
-    registration_date: datetime 
+    registration_date: date
     transaction_id_old: Optional[str] = None
-
-
+	
 class ChargeCreate(BaseModel):
-    student_id: int
-    transaction_id: int
+    student_id: str
+    transaction_id: str
     period: Optional[str] = None
     concept: Optional[str] = None
     concept_id: Optional[str] = None
-    amount: str
-    balance: str
+    amount: float
+    balance: float
     user_id: int
     expiration_date: date
     registration_date: date
     transaction_id_old: Optional[str] = None
     
-    
-#===========================================================================================================	        
 #===========================================================================================================	
 #===========================================================================================================
-2022/10/12 CONCETPS
+2022/10/19 CONCETPS / CONCEPTOS #100%
 #===========================================================================================================	
-
-from datetime import datetime
-
-from typing import Optional 
-from typing import Union
-
-
-from pydantic import BaseModel
-
-class ConceptsRead(BaseModel):
-    concepts: Optional[str] = None
-    category: Union[str, int]
-    provserv_key: Optional[int] = None
-    unit_key: Union[str, int] = None
-    college_id: int 
-    period_id: Optional[int] = None
-    program_id: Optional[int] = None
-    level_id: Optional[int] = None
-    registration_date: datetime = datetime.now() 
-    
-class ConceptsbynameRead(BaseModel):
-    concepts_id: Union[str, int]
-    concept: Optional[str] = None
-    category: Union[str, int]
-    provserv_key: Optional[int] = None
-    unit_key: Union[str, int] = None
-    college_id: int 
-    period_id: Optional[int] = None
-    program_id: Optional[int] = None
-    level_id: Optional[int] = None
-    registration_date: datetime = datetime.now() 
-
-class ConceptsbyInsert(BaseModel):
-    concepts_id: Union[str, int]
-    concepts: Optional[str] = None
-    category: Union[str, int]
-    provserv_key: Optional[int] = None
-    unit_key: Union[str, int] = None
-    college_id: int 
-    period_id: Optional[int] = None
-    program_id: Optional[int] = None
-    level_id: Optional[int] = None
-    registration_date: datetime = datetime.now() 
-	
-    
-
 #===========================================================================================================	
-#===========================================================================================================
-
-
-
-
-
-from datetime import datetime
-
-from sys import float_repr_style
-
-from typing import Optional
-
-from pydantic import BaseModel
-
-class DiscountsRead(BaseModel):
-    concept_id: str
-    desctype_id: int
-    days_period: Optional[str] = None
-    date_application: Optional[datetime] = None
-    type_amount: str
-    percentage: Optional[float] = None
-    amount: Optional[float] = None
-    concept_id_applies: str
-    status_id: str
-    user_id: int
-    activity_date: datetime
-
-class DiscountstypeRead(BaseModel):
-    config_id_d: int
-    concept_id: str
-    desctype_id: int
-    days_period: Optional[str] = None
-    date_application: Optional[datetime] = None
-    type_amount: str
-    percentage: Optional[float] = None
-    amount: Optional[float] = None
-    concept_id_applies: str
-    status_id: str
-    user_id: int
-    activity_date: datetime
-    
-#===========================================================================================================	
-
-from contextlib import nullcontext
 
 from datetime import date, datetime
 
-from typing import Union, Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
-class PaymentsRead(BaseModel):
-    transact_id: int
-    transaction_charge_id: str
-    concepts_id: Optional[str] = None
-    concepts: Optional[str] = None
-    payment_amount: str
-    amount_applied: str
-    status_id: str
-    uid_cfdi: Optional[str] = None
-    payment_id: str
-    user_id: int
-    pay_day: date
-    registration_date: datetime
-    transaction_id_old: Optional[str] = None 
-    transaction_id_charge_old: Optional[str] = None
+class ConceptRead(BaseModel):
+    concept: Optional[str] = None
+    category: str
+    provserv_key: Optional[str] = None
+    unit_key: Optional[str] = None
+    college_id: str 
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
+    registration_date: date 
+    
+class ConceptbynameRead(BaseModel):
+    concept_id: str
+    concept: Optional[str] = None
+    category: str
+    provserv_key: Optional[str] = None
+    unit_key: Optional[str] = None
+    college_id: str 
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
+    registration_date: date
 
-class PaymentsbytransaccionRead(BaseModel):
-    alumno_id: int
-    transact_id: int
-    transaction_charge_id: str
-    concepts_id: Optional[str] = None
-    concepts: Optional[str] = None
-    payment_amount: str
-    amount_applied: str
-    status_id: str
-    uid_cfdi: Optional[str] = None
-    payment_id: str
-    user_id: int
-    pay_day: date
-    registration_date: datetime   
-    transaction_id_old: Optional[str] = None 
-    transaction_id_charge_old: Optional[str] = None
-
-
+class ConceptCreate(BaseModel):
+    concept_id: str
+    concept: Optional[str] = None
+    category: str
+    provserv_key: Optional[str] = None
+    unit_key: Optional[str] = None
+    college_id: str 
+    period_id: Optional[int] = None
+    program_id: Optional[int] = None
+    level_id: Optional[int] = None
+    registration_date: date
+	
+#===========================================================================================================	        
 #===========================================================================================================	
 #===========================================================================================================
-2022/10/07
+2022/10/19 Discounts / DESCUENTOS #100%
+#===========================================================================================================	
+#===========================================================================================================	
 
-
-from datetime import datetime
+from datetime import date
 
 from typing import Optional
 
 from pydantic import BaseModel
 
-class ResponsiblesRead(BaseModel):
-    responsable_name: str
-    father_name: str
-    mother_name: Optional[str] = None
-    college_uid: Optional[str] = None
-    curp: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    contact_pref: str
-    alumno_id: int
-    status: str
-    registration_date: datetime
-    activity_date: datetime
+class DiscountRead(BaseModel):
+    concept_id: str
+    desctype_id: int
+    days_period: Optional[int] = None
+    date_application: Optional[date] = None
+    type_amount: str
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_id_applies: str
+    status_id: str
+    user_id: int
+    activity_date: date
 
-class ResponsiblesbynameRead(BaseModel):
-    responsable_id: int
-    responsable_name: str
-    father_name: str
-    mother_name: Optional[str] = None
-    college_uid: Optional[str] = None
-    curp: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    contact_pref: str
-    alumno_id: int
-    status: str
-    registration_date: datetime
-    activity_date: datetime
+class DiscounttypeRead(BaseModel):
+    config_id_d: int
+    concept_id: str
+    desctype_id: int
+    days_period: Optional[int] = None
+    date_application: Optional[date] = None
+    type_amount: str
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_id_applies: str
+    status_id: str
+    user_id: int
+    activity_date: date
 
-
-
-#===========================================================================================================
+class DiscountCreate(BaseModel):
+    concept_id: str
+    desctype_id: int
+    days_period: Optional[int] = None
+    date_application: Optional[date] = None
+    type_amount: str
+    percentage: Optional[float] = None
+    amount: Optional[float] = None
+    concept_id_applies: str
+    status_id: str
+    user_id: int
+    activity_date: date
+    
 #===========================================================================================================	
-2022/10/14
+#===========================================================================================================
+2022/10/19 Payments / PAGOS #100%
+#===========================================================================================================	
+#===========================================================================================================	
+	
+from datetime import date
+
+from typing import Optional
+
+from pydantic import BaseModel
+
+class PaymentRead(BaseModel):
+    transaction_id: str
+    transaction_charge_id: str
+    concepts_id: Optional[str] = None
+    concepts: Optional[str] = None
+    payment_amount: float
+    amount_applied: float
+    status_id: str
+    uid_cfdi: Optional[str] = None
+    payment_id: str
+    user_id: int
+    pay_day: date
+    registration_date: date
+    transaction_id_old: Optional[str] = None 
+    transaction_id_charge_old: Optional[str] = None
+
+class PaymentbytransaccionRead(BaseModel):
+    student_id: str
+    transaction_id: str
+    transaction_charge_id: str
+    concepts_id: Optional[str] = None
+    concepts: Optional[str] = None
+    payment_amount: float
+    amount_applied: float
+    status_id: str
+    uid_cfdi: Optional[str] = None
+    payment_id: str
+    user_id: int
+    pay_day: date
+    registration_date: date
+    transaction_id_old: Optional[str] = None 
+    transaction_id_charge_old: Optional[str] = None
+
+class PaymentCreate(BaseModel):
+    student_id: str
+    transaction_id: str
+    transaction_charge_id: str
+    concepts_id: Optional[str] = None
+    concepts: Optional[str] = None
+    payment_amount: float
+    amount_applied: float
+    status_id: str
+    uid_cfdi: Optional[str] = None
+    payment_id: str
+    user_id: int
+    pay_day: date
+    registration_date: date  
+    transaction_id_old: Optional[str] = None 
+    transaction_id_charge_old: Optional[str] = None
+
+#===========================================================================================================	
+#===========================================================================================================
+2022/10/19 Responsibles / RESPONSABLE #ERROR (Background on this error at: https://sqlalche.me/e/14/f405)
+#===========================================================================================================	
+#===========================================================================================================	
+
+from datetime import date, datetime
+
+from typing import Optional
+
+from pydantic import BaseModel
+
+class ResponsibleRead(BaseModel):
+    college_uid: Optional[str] = None
+    responsibles_name: str
+    father_name: str
+    mother_name: Optional[str] = None
+    curp: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    contact_pref: str
+    alumno_id: str
+    status_id: str
+    registration_date: date
+    activity_date: date
+    
+class ResponsiblebynameRead(BaseModel):
+    responsibles_id: int
+    college_uid: Optional[str] = None
+    responsibles_name: str
+    father_name: str
+    mother_name: Optional[str] = None    
+    curp: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    contact_pref: str
+    alumno_id: str
+    status_id: str
+    registration_date: date
+    activity_date: date
+
+class ResponsibleCreate(BaseModel):
+    responsibles_id: int
+    college_uid: Optional[str] = None
+    responsibles_name: str
+    father_name: str
+    mother_name: Optional[str] = None    
+    curp: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    contact_pref: str
+    alumno_id: str
+    status_id: str
+    registration_date: date
+    activity_date: date
+    
+#===========================================================================================================	
+#===========================================================================================================
+2022/10/19 Schoolarship / BECAS #100%
+#===========================================================================================================	
+#===========================================================================================================	
 
 from datetime import date
 
@@ -392,11 +429,11 @@ class SchoolarshipCreate(BaseModel):
     user_id: int
     activity_date: date
 
-
 #===========================================================================================================	
 #===========================================================================================================
-2022/10/07
-
+2022/10/19 School / COLEGIOS #100%
+#===========================================================================================================	
+#===========================================================================================================	
 
 from datetime import date
 
@@ -407,76 +444,75 @@ from pydantic import BaseModel
 class SchoolRead(BaseModel):
     college_name: str
     street: Optional[str] = None
-    suburb: Optional[str] = None
     suburb_id: int
-    municipality_id: Optional[int] = None
-    state_id: Optional[int] = None
-    zip: int
+    suburb: Optional[str] = None   
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
+    zip: str
     status_id: str
     registration_date: date
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
 class SchoolbynameRead(BaseModel):
-    college_id: int
+    college_id: str
     college_name: str
     street: Optional[str] = None
-    suburb: Optional[str] = None
     suburb_id: int
-    municipality_id: Optional[int] = None
-    state_id: Optional[int] = None
-    zip: int
+    suburb: Optional[str] = None   
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
+    zip: str
     status_id: str
     registration_date: date
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
 class SchoolCreate(BaseModel):
-    college_id: int
+    college_id: str
     college_name: str
     street: Optional[str] = None
     suburb_id: int
     suburb: Optional[str] = None   
-    municipality_id: Optional[int] = None
-    state_id: Optional[int] = None
-    zip: int
+    municipality_id: Optional[str] = None
+    state_id: Optional[str] = None
+    zip: str
     status_id: str
     registration_date: date
     c_cards: Optional[float] = None 
     c_oxxo: Optional[float] = None
 
-
-
+#===========================================================================================================	
 #===========================================================================================================
-#===========================================================================================================
-UPDATE 2022/10/10
+2022/10/19 Students / Alumnos #100%
+#===========================================================================================================	
+#===========================================================================================================	
 
 from datetime import date
 
 from typing import Optional
-from typing import Union
 
 from pydantic import BaseModel
 
 class StudentRead(BaseModel):
-    num_control: Optional[int] = None
+    control_num: Optional[str] = None
     student_name: str
     father_name: str
-    mother_name: Optional[str] = None
+    mother_name: Optional[str] = None    
     curp: str
     level_id: Optional[int] = None
     level: Optional[str] = None
     incorporation_key: Optional[str] = None
-    college_id: int
-    campus_id: Optional[str] = None
+    college_id: str
+    campus_id: Optional[int] = None
     degree: Optional[str] = None
     cluster: Optional[str] = None
-    status_id: Union[str, int]
+    status_id: str
     registration_date: date
     
 class StudentbynameRead(BaseModel):
-    student_id: int
-    num_control: Optional[str] = None
+    student_id: str
+    control_num: Optional[str] = None
     student_name: str
     father_name: str
     mother_name: Optional[str] = None    
@@ -484,16 +520,16 @@ class StudentbynameRead(BaseModel):
     level_id: Optional[int] = None
     level: Optional[str] = None
     incorporation_key: Optional[str] = None
-    college_id: int
-    campus_id: Optional[str] = None
+    college_id: str
+    campus_id: Optional[int] = None
     degree: Optional[str] = None
     cluster: Optional[str] = None
-    status_id: Union[str, int]
+    status_id: str
     registration_date: date
 
 class StudentCreate(BaseModel):
-    student_id: int
-    num_control: Optional[str] = None
+    student_id: str
+    control_num: Optional[str] = None
     student_name: str
     father_name: str
     mother_name: Optional[str] = None    
@@ -501,22 +537,122 @@ class StudentCreate(BaseModel):
     level_id: Optional[int] = None
     level: Optional[str] = None
     incorporation_key: Optional[str] = None
-    college_id: int
-    campus_id: Optional[str] = None
+    college_id: str
+    campus_id: Optional[int] = None
     degree: Optional[str] = None
     cluster: Optional[str] = None
-    status_id: Union[str, int]
+    status_id: str
     registration_date: date
 
+#===========================================================================================================	
+#===========================================================================================================
+2022/10/19 USER / Usuarios #100%
+#===========================================================================================================	
+#===========================================================================================================	
 
+from datetime import datetime
+
+from typing import Optional
+
+from pydantic import BaseModel
+
+class UsersRead(BaseModel):
+    users_type: str
+    users_name: str
+    father_name: str
+    mother_name: Optional[str] = None
+    college_id: Optional[str] = None
+    rol_id: int
+    status_id: str
+    #password: Union[str, int] 
+    email: str
+    registration_date: datetime
+    activity_date: datetime
+
+class UsersbynameRead(BaseModel):
+    usuario_id: int
+    users_type: str
+    users_name: str
+    father_name: str
+    mother_name: Optional[str] = None
+    college_id: Optional[str] = None
+    rol_id: int
+    status_id: str
+    #password: Union[str, int] 
+    email: str
+    registration_date: datetime 
+    activity_date: datetime
+
+class UsersAllRead(BaseModel):
+    usuario_id: int
+    users_type: str
+    users_name: str
+    father_name: str
+    mother_name: Optional[str] = None
+    college_id: Optional[str] = None
+    rol_id: int
+    status_id: str
+    #password: Union[str, int] 
+    email: str
+    registration_date: datetime
+    activity_date: datetime   
+
+#===========================================================================================================	
+#===========================================================================================================
+#===========================================================================================================	
+#===========================================================================================================
+#===========================================================================================================	
+#===========================================================================================================
 #===========================================================================================================	
 #===========================================================================================================
 
 
 
 
-Buenos dias a todos equipo.
-La frase de hoy es del autor Fellini, Federico:
-"Un buen vino es como una buena película: dura un instante y te deja en la boca un sabor a gloria; es nuevo en cada sorbo y , como ocurre con las películas, nace y renace en cada saboreador."
-Que todos pasen un lindo Viernes, vispera de fin de semana.
-                                                                                                                                                                    
+Buenos dias a todos team a este nuevo Jueves, ya casi fin de semana.
+La frase de hoy es del autor Brown, J:
+
+"Nunca olvides que basta una persona o una idea para cambiar tu vida para siempre,ya sea para bien o para mal"
+
+Que todos pasen un lindo jueves y este lleno de bendiciones. :).
+
+
+Web documentacion para estudiar 
+
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html (Docs Available services S3 - para trabajar con AWS - Prioridad)
+
+https://realpython.com/python-boto3-aws-s3/ (Python, Boto3, and AWS S3: Demystified)
+
+https://aws.amazon.com/es/sdk-for-python/ (AWS SDK para Python (Boto3))
+
+https://codigofacilito.com/articulos/boto3 (Boto3)
+
+#=======================================================================================================================
+
+https://fastapi.tiangolo.com/es/tutorial/body/ (Import Pydantic's BaseModel, Request Body¶ from AAPI)
+
+https://sqlmodel.tiangolo.com/tutorial/insert/ (SQLModel Create Rows - Use the Session - INSERT)
+
+https://sqlmodel.tiangolo.com/tutorial/limit-and-offset/ (SQLModel Read a Range of Data - LIMIT and OFFSET)
+
+https://www.youtube.com/watch?v=RhhzKjK3bac&ab_channel=PythonColombia (Haz un servicio de ML fácilmente con FastAPI | Python Bogotá)
+
+https://www.youtube.com/watch?v=pmbSKoaxEho&ab_channel=ParadigmaDigital (Introducción a FastAPI)
+
+https://www.youtube.com/watch?v=G6OPbpGE8Kk&t=12s&ab_channel=ParadigmaDigital (Aprende Python avanzado.)
+
+https://www.youtube.com/watch?v=HiXLkL42tMU&t=1907s&ab_channel=Fazt (Git y Github | Curso Práctico de Git y Github Desde Cero)
+
+https://www.youtube.com/watch?v=swdcD6OPMlk&ab_channel=LucasMoy (Curso Completo de Python para Principiantes (2022))
+
+https://www.youtube.com/watch?v=N5VjIqAsDQ8&ab_channel=GregoryVicentCode (API REST CRUD de usuarios con FastAPI y conexión a BASE DE DATOS MySQL)
+
+https://www.youtube.com/watch?v=dAQENEPAqsc&ab_channel=codigofacilito (Clase gratuita: APIs con Python usando Fast API)
+
+https://www.youtube.com/watch?v=6eVj33l5e9M&ab_channel=FaztCode (FastAPI & SQLAlchemy RESTAPI CRUD)
+
+https://www.youtube.com/watch?v=FCSd9LFQiyo&list=PL5catBR9eAqitpammM9GHDxhKqo3ZshM3&index=6&ab_channel=RoCode (FastAPI - Creación de schemas con pydantic y creacion de api crear usuario) ***************************************** este es el video ***********************************************
+https://github.com/Rojas-Andres/curso-fastapi/tree/master/app (Repositorio)
+
+
+https://docs.sqlalchemy.org/en/14/core/engines.html#microsoft-sql-server (Microsoft SQL Server)              
